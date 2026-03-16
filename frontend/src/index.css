@@ -1,0 +1,46 @@
+:root {
+  --bg-dark: #0d0d12;
+  --bg-card: #16161d;
+  --bg-hover: #1e1e28;
+  --accent-cyan: #00d4aa;
+  --accent-cyan-dim: #00a88a;
+  --accent-coral: #ff6b6b;
+  --accent-gold: #ffd93d;
+  --text-primary: #f0f0f5;
+  --text-muted: #8b8b9e;
+  --border: #2a2a35;
+  --win: #00d4aa;
+  --loss: #ff6b6b;
+  --fair: #ffd93d;
+  --rarity-common: #9ca3af;
+  --rarity-uncommon: #22c55e;
+  --rarity-rare: #3b82f6;
+  --rarity-epic: #a855f7;
+  --rarity-legendary: #f59e0b;
+  --rarity-mythical: #ec4899;
+  --rarity-cosmic: #06b6d4;
+  --rarity-secret: #8b5cf6;
+  --rarity-celestial: #eab308;
+  --rarity-divine: #f97316;
+  --rarity-infinity: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 170, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(139, 92, 246, 0.06), transparent);
+}
+
+#root {
+  min-height: 100vh;
+}

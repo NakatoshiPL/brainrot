@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape Tsunami Brainrot WFL | Win Fair Loss 2026</title>
+  <meta name="description" content="Najlepszy kalkulator WFL dla Escape Tsunami for Brainrots! Sprawdź trade zanim scamują - $/s + mutacje + kolory">
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; margin:0; padding:20px; }
+    h1 { text-align:center; color:#00ff00; text-shadow: 0 0 10px #00ff00; }
+    .container { max-width:1200px; margin:auto; }
+    .search { width:100%; padding:15px; font-size:18px; background:#1f1f1f; border:none; color:white; border-radius:10px; margin:20px 0; }
+    .items { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:15px; }
+    .item { background:#1f1f1f; padding:10px; border-radius:12px; text-align:center; cursor:pointer; transition:0.3s; }
+    .item:hover { transform:scale(1.05); box-shadow:0 0 15px #00ff00; }
+    .item-thumb { width:100%; height:80px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:bold; color:#fff; margin-bottom:8px; object-fit:contain; }
+    .item-thumb.img { background:transparent; }
+    .item-thumb-wrap { position:relative; width:100%; height:80px; margin-bottom:8px; }
+    .item-thumb-wrap .item-thumb { position:absolute; left:0; top:0; width:100%; height:100%; }
+    .rarity { font-size:12px; padding:2px 8px; border-radius:5px; display:inline-block; margin:5px 0; }
+    .Common { background:#666; } .Uncommon { background:#00ff00; color:#000; } .Rare { background:#0066ff; }
+    .Epic { background:#ff00ff; } .Legendary { background:#ffaa00; color:#000; } .Mythical { background:#aa00ff; }
+    .Cosmic { background:#00ffff; color:#000; } .Secret { background:#ffff00; color:#000; } .Celestial { background:#ff00aa; }
+    .Divine, .Infinity { background:linear-gradient(45deg,#ff00ff,#ffff00); color:black; font-weight:bold; }
+    .trade-area { display:flex; gap:20px; margin:30px 0; flex-wrap:wrap; }
+    .side { flex:1; background:#1f1f1f; padding:20px; border-radius:15px; min-width:300px; }
+    .side .item { cursor:pointer; }
+    .side .item:hover { box-shadow:0 0 15px #ff6666; }
+    .total { font-size:24px; font-weight:bold; padding:15px; border-radius:10px; text-align:center; margin-top:10px; }
+    .win { background:#00ff00; color:black; } .fair { background:#ffff00; color:black; } .loss { background:#ff0000; color:white; }
+    button { background:#00ff00; color:black; border:none; padding:12px 25px; font-size:18px; border-radius:10px; cursor:pointer; }
+    .result { font-size:28px; text-align:center; margin:20px 0; padding:20px; border-radius:15px; }
+    .hint { font-size:12px; color:#888; margin-top:5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Escape Tsunami Brainrot WFL Calculator 2026</h1>
+    <p style="text-align:center;color:#aaa;">Sprawdź trade zanim stracisz! (aktualne na marzec 2026 z GameRant)</p>
+
+    <input type="text" id="search" class="search" placeholder="🔍 Szukaj brainrota (np. Dug Dug Dug)">
+
+    <div class="items" id="allItems"></div>
+
+    <div class="trade-area">
+      <div class="side">
+        <h2>Twoja oferta</h2>
+        <p class="hint">Kliknij item powyżej, by dodać tutaj</p>
+        <div id="offered" class="items"></div>
+        <div id="offeredTotal" class="total">0 $/s</div>
+      </div>
+      <div class="side">
+        <h2>Co dostajesz</h2>
+        <p class="hint">Alt+klik na item, by dodać tutaj</p>
+        <div id="requested" class="items"></div>
+        <div id="requestedTotal" class="total">0 $/s</div>
+      </div>
+    </div>
+
+    <center><button onclick="calculateTrade()">SPRAWDŹ TRADE → WIN / FAIR / LOSS</button></center>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const brainrots = [{"name":"Noobini Cakenini","rarity":"Common","baseIncome":2,"imageUrl":""},{"name":"Lirili Larila","rarity":"Common","baseIncome":4,"imageUrl":""},{"name":"Tim Cheese","rarity":"Common","baseIncome":6,"imageUrl":""},{"name":"Frulli Frulla","rarity":"Common","baseIncome":7,"imageUrl":""},{"name":"Talpa Di Fero","rarity":"Common","baseIncome":9,"imageUrl":""},{"name":"Svinino Bombondino","rarity":"Common","baseIncome":11,"imageUrl":""},{"name":"Pipi Kiwi","rarity":"Common","baseIncome":13,"imageUrl":""},{"name":"Pipi Corni","rarity":"Common","baseIncome":15,"imageUrl":""},{"name":"Trippi Troppi","rarity":"Uncommon","baseIncome":20,"imageUrl":""},{"name":"Gangster Footera","rarity":"Uncommon","baseIncome":30,"imageUrl":""},{"name":"Bobrito Bandito","rarity":"Uncommon","baseIncome":35,"imageUrl":""},{"name":"Boneca Ambalabu","rarity":"Uncommon","baseIncome":40,"imageUrl":""},{"name":"Cacto Hipopotamo","rarity":"Uncommon","baseIncome":50,"imageUrl":""},{"name":"Ta Ta Ta Sahur","rarity":"Uncommon","baseIncome":60,"imageUrl":""},{"name":"Tric Tric Baraboom","rarity":"Uncommon","baseIncome":70,"imageUrl":""},{"name":"67","rarity":"Uncommon","baseIncome":90,"imageUrl":""},{"name":"Cappuccino Assassino","rarity":"Rare","baseIncome":100,"imageUrl":""},{"name":"Pipi Avocado","rarity":"Uncommon","baseIncome":120,"imageUrl":""},{"name":"Trulimero Trulicina","rarity":"Rare","baseIncome":135,"imageUrl":""},{"name":"Bambini Crostini","rarity":"Rare","baseIncome":150,"imageUrl":""},{"name":"Bananita Dolphinita","rarity":"Rare","baseIncome":170,"imageUrl":""},{"name":"Brr Brr Patapim","rarity":"Rare","baseIncome":180,"imageUrl":""},{"name":"Perochello Lemonchello","rarity":"Rare","baseIncome":190,"imageUrl":""},{"name":"Avocadini Guffo","rarity":"Rare","baseIncome":210,"imageUrl":""},{"name":"Salamino Penguino","rarity":"Rare","baseIncome":229,"imageUrl":""},{"name":"Penguino Cocosino","rarity":"Rare","baseIncome":250,"imageUrl":""},{"name":"Ti Ti Ti Sahur","rarity":"Rare","baseIncome":275,"imageUrl":""},{"name":"Burbaloni Luliloli","rarity":"Epic","baseIncome":290,"imageUrl":""},{"name":"Chimpanzini Bananini","rarity":"Epic","baseIncome":475,"imageUrl":""},{"name":"Ballerina Cappuccina","rarity":"Epic","baseIncome":550,"imageUrl":""},{"name":"Chef Crabracadabra","rarity":"Epic","baseIncome":625,"imageUrl":""},{"name":"Lionel Cactuseli","rarity":"Epic","baseIncome":700,"imageUrl":""},{"name":"Glorbo Fruttodrillo","rarity":"Epic","baseIncome":775,"imageUrl":""},{"name":"Strawberrelli Flamingelli","rarity":"Epic","baseIncome":925,"imageUrl":""},{"name":"Pandaccini Bananini","rarity":"Epic","baseIncome":1000,"imageUrl":""},{"name":"Sigma Boy","rarity":"Epic","baseIncome":1100,"imageUrl":""},{"name":"Pi Pi Watermelon","rarity":"Epic","baseIncome":1200,"imageUrl":""},{"name":"Blueberrinni Octopussini","rarity":"Epic","baseIncome":1275,"imageUrl":""},{"name":"Cocosini Mama","rarity":"Epic","baseIncome":1300,"imageUrl":""},{"name":"Guesto Angelic","rarity":"Epic","baseIncome":1400,"imageUrl":""},{"name":"Frigo Camelo","rarity":"Legendary","baseIncome":1500,"imageUrl":""},{"name":"Orangutini Ananasini","rarity":"Legendary","baseIncome":1700,"imageUrl":""},{"name":"Rhino Toasterino","rarity":"Legendary","baseIncome":1900,"imageUrl":""},{"name":"Bombardiro Crocodilo","rarity":"Legendary","baseIncome":2100,"imageUrl":""},{"name":"Spioniro Golubiro","rarity":"Legendary","baseIncome":2290,"imageUrl":""},{"name":"Bombombini Gusini","rarity":"Legendary","baseIncome":2600,"imageUrl":""},{"name":"Zibra Zubra Zibralini","rarity":"Legendary","baseIncome":2900,"imageUrl":""},{"name":"Tigrilini Watermelini","rarity":"Legendary","baseIncome":3200,"imageUrl":""},{"name":"Cavallo Virtuoso","rarity":"Legendary","baseIncome":3500,"imageUrl":""},{"name":"Gorillo Watermelondrillo","rarity":"Legendary","baseIncome":4000,"imageUrl":""},{"name":"Avocadorilla","rarity":"Legendary","baseIncome":4500,"imageUrl":""},{"name":"Eaglucci Cocosucci","rarity":"Legendary","baseIncome":4700,"imageUrl":""},{"name":"Ganganzelli Trulala","rarity":"Legendary","baseIncome":5000,"imageUrl":""},{"name":"Cocofanto Elefanto","rarity":"Mythical","baseIncome":6000,"imageUrl":""},{"name":"Giraffa Celeste","rarity":"Mythical","baseIncome":7000,"imageUrl":""},{"name":"Tralalero Tralala","rarity":"Mythical","baseIncome":8000,"imageUrl":""},{"name":"Los Crocodillitos","rarity":"Mythical","baseIncome":9000,"imageUrl":""},{"name":"Tigroligre Frutonni","rarity":"Mythical","baseIncome":10000,"imageUrl":""},{"name":"Udin Din Din Dun","rarity":"Mythical","baseIncome":11000,"imageUrl":""},{"name":"Trenostruzzo Turbo 3000","rarity":"Mythical","baseIncome":13000,"imageUrl":""},{"name":"Trippi Troppi Troppa Trippa","rarity":"Mythical","baseIncome":15000,"imageUrl":""},{"name":"Orcalero Orcala","rarity":"Mythical","baseIncome":18000,"imageUrl":""},{"name":"Piccione Macchina","rarity":"Mythical","baseIncome":19000,"imageUrl":""},{"name":"Tukanno Bananno","rarity":"Mythical","baseIncome":21000,"imageUrl":""},{"name":"La Vacca Saturno Saturnita","rarity":"Cosmic","baseIncome":22000,"imageUrl":""},{"name":"Ballerino Lololo","rarity":"Mythical","baseIncome":25250,"imageUrl":""},{"name":"Torrtuginni Dragonfrutini","rarity":"Cosmic","baseIncome":30000,"imageUrl":""},{"name":"Los Tralaleritos","rarity":"Cosmic","baseIncome":48000,"imageUrl":""},{"name":"Las Tralaleritas","rarity":"Cosmic","baseIncome":50000,"imageUrl":""},{"name":"Las Vaquitas Saturnitas","rarity":"Cosmic","baseIncome":60000,"imageUrl":""},{"name":"Graipuss Medussi","rarity":"Cosmic","baseIncome":70000,"imageUrl":""},{"name":"Pot Hotspot","rarity":"Cosmic","baseIncome":80000,"imageUrl":""},{"name":"Chicleteira Bicicleteira","rarity":"Cosmic","baseIncome":90000,"imageUrl":""},{"name":"La Grande Combinasion","rarity":"Cosmic","baseIncome":100000,"imageUrl":""},{"name":"Nuclearo Dinossauro","rarity":"Cosmic","baseIncome":110000,"imageUrl":""},{"name":"Garama and Madundung","rarity":"Cosmic","baseIncome":120000,"imageUrl":""},{"name":"Dragon Cannelloni","rarity":"Cosmic","baseIncome":130000,"imageUrl":""},{"name":"Agarrini la Palini","rarity":"Cosmic","baseIncome":150000,"imageUrl":""},{"name":"Chimpanzini Spiderini","rarity":"Cosmic","baseIncome":170000,"imageUrl":""},{"name":"Dariungini Pandanneli","rarity":"Cosmic","baseIncome":190000,"imageUrl":""},{"name":"Matteo","rarity":"Secret","baseIncome":200000,"imageUrl":""},{"name":"Vroosh Boosh","rarity":"Cosmic","baseIncome":240000,"imageUrl":""},{"name":"Gattatino Neonino","rarity":"Secret","baseIncome":250000,"imageUrl":""},{"name":"Statutino Libertino","rarity":"Secret","baseIncome":300000,"imageUrl":""},{"name":"Unclito Samito","rarity":"Secret","baseIncome":350000,"imageUrl":""},{"name":"Gattatino Donutino","rarity":"Secret","baseIncome":400000,"imageUrl":""},{"name":"Espresso Signora","rarity":"Secret","baseIncome":450000,"imageUrl":""},{"name":"Los Tungtungtungcitos","rarity":"Secret","baseIncome":500000,"imageUrl":""},{"name":"Aura Farma","rarity":"Secret","baseIncome":700000,"imageUrl":""},{"name":"Rainbow 67","rarity":"Secret","baseIncome":800000,"imageUrl":""},{"name":"Fragola La La La","rarity":"Secret","baseIncome":1000000,"imageUrl":""},{"name":"Eek Eek Eek Sahur","rarity":"Secret","baseIncome":1050000,"imageUrl":""},{"name":"Bambooini Bombini","rarity":"Secret","baseIncome":1140000,"imageUrl":""},{"name":"La Vacca Black Hole Goat","rarity":"Secret","baseIncome":1200000,"imageUrl":""},{"name":"Mastodontico Telepiedone","rarity":"Secret","baseIncome":1420000,"imageUrl":""},{"name":"Caffe Trinity","rarity":"Celestial","baseIncome":2000000,"imageUrl":""},{"name":"Tractoro Dinosauro","rarity":"Secret","baseIncome":4650000,"imageUrl":""},{"name":"Capybara Monitora","rarity":"Secret","baseIncome":5090000,"imageUrl":""},{"name":"Patatino Astronauta","rarity":"Secret","baseIncome":5700000,"imageUrl":""},{"name":"Patito Dinerito","rarity":"Secret","baseIncome":6000000,"imageUrl":""},{"name":"Onionello Penguini","rarity":"Secret","baseIncome":6450000,"imageUrl":""},{"name":"Job Job Job Sahur","rarity":"Celestial","baseIncome":7500000,"imageUrl":""},{"name":"Dug Dug Dug","rarity":"Celestial","baseIncome":8000000,"imageUrl":""},{"name":"Bisonte Giuppitere","rarity":"Celestial","baseIncome":8500000,"imageUrl":""},{"name":"Alessio","rarity":"Celestial","baseIncome":9000000,"imageUrl":""},{"name":"Esok Sekolah","rarity":"Celestial","baseIncome":9500000,"imageUrl":""},{"name":"La Malita","rarity":"Celestial","baseIncome":12000000,"imageUrl":""},{"name":"Diamantusa","rarity":"Celestial","baseIncome":12250000,"imageUrl":""},{"name":"Avocadini Antilopini","rarity":"Celestial","baseIncome":13000000,"imageUrl":""},{"name":"Los Orcaleritos","rarity":"Celestial","baseIncome":14000000,"imageUrl":""},{"name":"Capuccino Policia","rarity":"Celestial","baseIncome":14500000,"imageUrl":""},{"name":"Money Elephant","rarity":"Celestial","baseIncome":14750000,"imageUrl":""},{"name":"Zung Zung Zung Lazur","rarity":"Celestial","baseIncome":14750000,"imageUrl":""},{"name":"Rattini Machini","rarity":"Celestial","baseIncome":15250000,"imageUrl":""},{"name":"Bulbito Bandito Traktorito","rarity":"Divine","baseIncome":30000000,"imageUrl":""},{"name":"Burgerini Bearini","rarity":"Divine","baseIncome":35000000,"imageUrl":""},{"name":"Martino Gravitino","rarity":"Divine","baseIncome":45000000,"imageUrl":""},{"name":"Grappellino D'Oro","rarity":"Divine","baseIncome":48500000,"imageUrl":""},{"name":"Strawberry Elephant","rarity":"Divine","baseIncome":50000000,"imageUrl":""},{"name":"Galactio Fantasma","rarity":"Divine","baseIncome":88800000,"imageUrl":""},{"name":"Anububu","rarity":"Infinity","baseIncome":250000000,"imageUrl":""},{"name":"Meta Technetta","rarity":"Infinity","baseIncome":300000000,"imageUrl":""},{"name":"Noobini Infeeny","rarity":"Infinity","baseIncome":375000000,"imageUrl":""},{"name":"Magmew","rarity":"Infinity","baseIncome":400000000,"imageUrl":""}];
+
+    const RARITY_COLORS = { Common:'#666', Uncommon:'#00ff00', Rare:'#0066ff', Epic:'#ff00ff', Legendary:'#ffaa00', Mythical:'#aa00ff', Cosmic:'#00ffff', Secret:'#ffff00', Celestial:'#ff00aa', Divine:'#ff00ff', Infinity:'#ffff00' };
+    const ORIGINAL_IMAGE_BASE = 'https://www.playbrainrot.org/images/characters/';
+
+    let offered = [], requested = [];
+
+    function toId(name) {
+      return String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/['']/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    }
+
+    function formatIncome(n) {
+      if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
+      if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+      if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+      return String(n);
+    }
+
+    function thumbStyle(rarity) {
+      return 'background:' + (RARITY_COLORS[rarity] || '#444') + ';';
+    }
+
+    function makeItemEl(b, opts) {
+      const div = document.createElement('div');
+      div.className = 'item';
+      const initials = b.name.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase() || '?';
+      const imgUrl = (b.imageUrl && b.imageUrl.startsWith('http')) ? b.imageUrl : (ORIGINAL_IMAGE_BASE + (b.id || toId(b.name)) + '.webp');
+      const fallbackId = 'fb_' + Math.random().toString(36).slice(2);
+      div.innerHTML = '<div class="item-thumb-wrap"><img class="item-thumb img" alt="' + b.name.replace(/"/g,'&quot;') + '" loading="lazy" src="' + imgUrl + '" onerror="this.style.display=\'none\';document.getElementById(\'' + fallbackId + '\').style.display=\'flex\'"><div id="' + fallbackId + '" class="item-thumb" style="' + thumbStyle(b.rarity) + ';display:none">' + initials + '</div></div><div><b>' + b.name + '</b></div><div class="rarity ' + b.rarity + '">' + b.rarity + '</div><div>' + b.baseIncome.toLocaleString() + ' $/s</div>';
+      const img = div.querySelector('img');
+      const fallback = div.querySelector('#' + fallbackId);
+      if (img && fallback) img.onerror = function() { this.style.display='none'; fallback.style.display='flex'; };
+      return div;
+    }
+
+    function renderItems(containerId, list, isSide) {
+      const cont = document.getElementById(containerId);
+      cont.innerHTML = '';
+      list.forEach((b, i) => {
+        const div = makeItemEl(b);
+        if (isSide) {
+          div.onclick = (e) => { e.stopPropagation(); list.splice(i, 1); updateSides(); };
+        } else {
+          div.onclick = (e) => {
+            if (e.altKey) { requested.push(b); } else { offered.push(b); }
+            updateSides();
+          };
+        }
+        cont.appendChild(div);
+      });
+      if (containerId === 'offered') document.getElementById('offeredTotal').textContent = formatIncome(offered.reduce((s,b)=>s+b.baseIncome,0)) + ' $/s';
+      if (containerId === 'requested') document.getElementById('requestedTotal').textContent = formatIncome(requested.reduce((s,b)=>s+b.baseIncome,0)) + ' $/s';
+    }
+
+    function updateSides() {
+      renderItems('offered', offered, true);
+      renderItems('requested', requested, true);
+    }
+
+    function calculateTrade() {
+      const offeredVal = offered.reduce((s,b)=>s+b.baseIncome,0);
+      const requestedVal = requested.reduce((s,b)=>s+b.baseIncome,0);
+      const diff = offeredVal ? ((requestedVal - offeredVal) / offeredVal) * 100 : (requestedVal ? 100 : 0);
+
+      let status = '', color = '';
+      if (diff > 15) { status = 'WIN 🔥 MEGA ZYSK!'; color = 'win'; }
+      else if (diff >= -10) { status = 'FAIR ⚖️'; color = 'fair'; }
+      else { status = 'LOSS ❌ strata'; color = 'loss'; }
+
+      document.getElementById('result').innerHTML = '<div class="' + color + '">' + status + '</div><p>Twoja oferta: ' + formatIncome(offeredVal) + ' $/s<br>Dostajesz: ' + formatIncome(requestedVal) + ' $/s<br>Różnica: ' + diff.toFixed(1) + '%</p>';
+    }
+
+    function renderAll(list) {
+      const cont = document.getElementById('allItems');
+      cont.innerHTML = '';
+      list.forEach(b => {
+        const div = makeItemEl(b);
+        div.onclick = (e) => {
+          if (e.altKey) requested.push(b); else offered.push(b);
+          updateSides();
+        };
+        cont.appendChild(div);
+      });
+    }
+
+    renderAll(brainrots);
+    document.getElementById('search').addEventListener('input', function() {
+      const term = this.value.toLowerCase();
+      renderAll(term ? brainrots.filter(b => b.name.toLowerCase().includes(term)) : brainrots);
+    });
+  </script>
+</body>
+</html>
