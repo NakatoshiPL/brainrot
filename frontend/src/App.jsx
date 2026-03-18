@@ -32,10 +32,7 @@ function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
-  // External URLs via proxy (Fandom blocks hotlink)
-  const imageUrl = rawUrl && rawUrl.startsWith('http')
-    ? `${API_BASE}/image?url=${encodeURIComponent(rawUrl)}`
-    : rawUrl
+  const imageUrl = rawUrl
   const showImage = imageUrl && !imgFailed
 
   return (
