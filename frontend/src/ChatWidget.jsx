@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './ChatWidget.css'
 
-const API_BASE = '/api'
+const API_BASE = (import.meta.env.VITE_API_URL || '') + '/api'
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)

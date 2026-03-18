@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import './App.css'
 import ChatWidget from './ChatWidget'
 
-const API_BASE = '/api'
+const API_BASE = (import.meta.env.VITE_API_URL || '') + '/api'
 
 function formatIncome(income) {
   if (income >= 1e9) return `${(income / 1e9).toFixed(1)}B`
