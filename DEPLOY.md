@@ -1,45 +1,45 @@
-# GitHub + strona online
+# GitHub + site online
 
-## 1. Wypchnięcie na GitHub
+## 1. Push to GitHub
 
-1. Wejdź na **https://github.com/new**
-2. Utwórz nowe repozytorium (np. `escape-tsunami-wfl`), **bez** README (masz już commit).
-3. W terminalu w folderze projektu:
+1. Go to **https://github.com/new**
+2. Create a new repository (e.g. `escape-tsunami-wfl`), **without** README (you already have a commit).
+3. In the project folder in terminal:
 
 ```powershell
 cd c:\Users\subde\strona
-git remote add origin https://github.com/TWOJ_LOGIN/NAZWA_REPO.git
+git remote add origin https://github.com/YOUR_USERNAME/REPO_NAME.git
 git branch -M main
 git push -u origin main
 ```
 
-(Zamień `TWOJ_LOGIN` i `NAZWA_REPO` na swoje dane.)
+(Replace `YOUR_USERNAME` and `REPO_NAME` with your details.)
 
 ---
 
-## 2. Strona online (Vercel – za darmo)
+## 2. Site online (Vercel – free)
 
-Strona działa **bez backendu** (dane z pliku `brainrots.json`), więc wystarczy wrzucić frontend.
+The site works **without the backend** (data from `brainrots.json`), so deploying the frontend is enough.
 
-1. Wejdź na **https://vercel.com** i zaloguj się (np. przez GitHub).
+1. Go to **https://vercel.com** and sign in (e.g. via GitHub).
 2. **Add New… → Project**.
-3. **Import** swojego repozytorium z GitHub.
-4. Ustaw:
+3. **Import** your repository from GitHub.
+4. Set:
    - **Root Directory:** `frontend`
    - **Framework Preset:** Vite
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist`
-5. Kliknij **Deploy**.
+5. Click **Deploy**.
 
-Po chwili dostaniesz link typu `twoj-projekt.vercel.app` – to Twoja strona online.
+After a moment you’ll get a link like `your-project.vercel.app` – that’s your site.
 
 ---
 
-### Opcjonalnie: backend online
+### Optional: backend online
 
-Jeśli kiedyś chcesz mieć też API (obrazki przez proxy, zawsze świeże dane z backendu):
+If you later want the API (image proxy, always fresh data from backend):
 
-- **Vercel:** dodaj w katalogu głównym `api/` ze serverless functions (trzeba przepisać Express na funkcje).
-- **Railway / Render:** wrzuć tam folder `backend` i uruchom `node server.js`, a w ustawieniach frontu (Vite) ustaw zmienną z adresem API.
+- **Vercel:** add an `api/` directory at the root with serverless functions (you’d need to adapt Express to functions).
+- **Railway / Render:** deploy the `backend` folder and run `node server.js`, then set the API URL in the frontend (Vite) config.
 
-Na start wystarczy sam frontend na Vercelu – kalkulator WFL i lista działają w pełni.
+To start, the frontend on Vercel is enough – the WFL calculator and list work fully.

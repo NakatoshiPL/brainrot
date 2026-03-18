@@ -402,7 +402,7 @@ const PLAYBRAINROT = {
   "las vaquitas saturnitas":     "las-vaquitas-saturnitas",
 };
 
-// Normalizuj nazwę do wyszukiwania
+// Normalize name for lookup
 function norm(s) {
   return s.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -423,25 +423,25 @@ for (const item of data.items) {
     mapping[item.id] = `${BASE}${slug}.webp`;
     found.push(`  ✅ ${item.id.padEnd(35)} ← ${slug}.webp`);
   } else {
-    // Spróbuj też ID jako slug
+    // Try ID as slug too
     const idSlug = item.id.replace(/_/g, '-');
     if (PLAYBRAINROT[norm(idSlug.replace(/-/g, ' '))]) {
       const s = PLAYBRAINROT[norm(idSlug.replace(/-/g, ' '))];
       mapping[item.id] = `${BASE}${s}.webp`;
       found.push(`  ✅ ${item.id.padEnd(35)} ← (via id) ${s}.webp`);
     } else {
-      missing.push(`  ❌ ${item.id.padEnd(35)} → "${item.name}" (szukano: "${key}")`);
+      missing.push(`  ❌ ${item.id.padEnd(35)} → "${item.name}" (searched: "${key}")`);
     }
   }
 }
 
 fs.writeFileSync(OUT_PATH, JSON.stringify({ mapping }, null, 2), 'utf8');
 
-console.log(`\n✅ Zmapowano: ${found.length}/${data.items.length}`);
+console.log(`\n✅ Mapped: ${found.length}/${data.items.length}`);
 found.forEach(l => console.log(l));
 
 if (missing.length) {
-  console.log(`\n⚠️  Brak dopasowania dla ${missing.length} itemów:`);
+  console.log(`\n⚠️  No match for ${missing.length} items:`);
   missing.forEach(m => console.log(m));
 }
-console.log(`\n📁 Zapisano: ${OUT_PATH}`);
+console.log(`\n📁 Saved: ${OUT_PATH}`);

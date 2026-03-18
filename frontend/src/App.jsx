@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import './App.css'
+import ChatWidget from './ChatWidget'
 
 const API_BASE = '/api'
 
@@ -31,7 +32,7 @@ function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
-  // Zewnętrzne URL-e przez proxy (Fandom blokuje hotlink)
+  // External URLs via proxy (Fandom blocks hotlink)
   const imageUrl = rawUrl && rawUrl.startsWith('http')
     ? `${API_BASE}/image?url=${encodeURIComponent(rawUrl)}`
     : rawUrl
@@ -168,7 +169,7 @@ function computeWFL(yourIncome, theirIncome) {
 }
 
 function VerschilCenter({ resultData }) {
-  if (!resultData) return <div className="verschil-center">Wybierz przedmioty do wymiany</div>
+  if (!resultData) return <div className="verschil-center">Select items to compare trade</div>
 
   const { status, color, diffPercent } = resultData
 
@@ -207,7 +208,7 @@ export default function App() {
         setMeta(data.meta || null)
       })
       .catch(() => {
-        // Fallback gdy backend niedostępny – ładuj z public/brainrots.json
+        // Fallback when backend unavailable – load from public/brainrots.json
         fetch('/brainrots.json')
           .then(r => r.json())
           .then(data => {
@@ -224,7 +225,7 @@ export default function App() {
       .finally(() => setLoading(false))
   }, [])
 
-  // WFL: wywołaj API calculate-trade lub policz lokalnie (fallback)
+  // WFL: call calculate-trade API or compute locally (fallback)
   useEffect(() => {
     if (!items.length || (yourItems.length === 0 && theirItems.length === 0)) {
       setTradeResult(null)
@@ -347,7 +348,7 @@ export default function App() {
           className="sources-toggle"
           onClick={() => setSourcesOpen(!sourcesOpen)}
         >
-          {sourcesOpen ? '▼' : '▶'} Źródła danych
+          {sourcesOpen ? '▼' : '▶'} Data sources
         </button>
         {sourcesOpen && (
           <div className="sources-content">
@@ -397,6 +398,7 @@ export default function App() {
           columnId="theirs"
         />
       </div>
+      <ChatWidget />
     </div>
   )
 }

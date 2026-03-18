@@ -1,5 +1,6 @@
 /**
  * For items with Beebom URLs (that 404), fetch from ETFB wiki as fallback.
+ * Tries multiple title variants and Steal A Brainrot wiki as second fallback.
  * Run: node scripts/fill-missing-from-etfb.js
  */
 
@@ -8,10 +9,16 @@ const path = require('path');
 
 const MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
 const BRAINROTS_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
-const FANDOM_API = 'https://escape-tsunami-for-brainrots.fandom.com/api.php';
+const ETFB_API = 'https://escape-tsunami-for-brainrots.fandom.com/api.php';
+const STEALABRAINROT_API = 'https://stealabrainrot.fandom.com/api.php';
 
-async function fetchImageUrl(fandomTitle) {
-  const url = `${FANDOM_API}?action=query&titles=${encodeURIComponent(fandomTitle)}&prop=pageimages&format=json&pithumbsize=128`;
+const TITLE_VARIANTS = {
+  'dariungini-pandanneli': ['Dariungini_Pandanneli', 'Dariungini Pandanneli'],
+  'capybara-monitora': ['Capybara_Monitora', 'Capybara Monitora'],
+};
+
+async function fetchImageUrl(apiBase, fandomTitle) {
+  const url = `${apiBase}?action=query&titles=${encodeURIComponent(fandomTitle)}&prop=pageimages&format=json&pithumbsize=256`;
   try {
     const res = await fetch(url);
     const data = await res.json();
@@ -34,12 +41,23 @@ async function main() {
     const item = itemsById[id];
     if (!item) continue;
 
-    const title = item.name.replace(/\s+/g, '_');
-    const imgUrl = await fetchImageUrl(title);
+    const titles = TITLE_VARIANTS[id] || [item.name.replace(/\s+/g, '_'), item.name];
+    let imgUrl = null;
+    for (const title of titles) {
+      imgUrl = await fetchImageUrl(ETFB_API, title);
+      if (imgUrl) break;
+      await new Promise(r => setTimeout(r, 150));
+    }
+    if (!imgUrl) {
+      const fallbackTitle = item.name.replace(/\s+/g, '_');
+      imgUrl = await fetchImageUrl(STEALABRAINROT_API, fallbackTitle);
+    }
     if (imgUrl) {
       mapping[id] = imgUrl;
       filled++;
-      console.log(`✓ ${id} (ETFB fallback)`);
+      console.log(`✓ ${id} (ETFB/fallback)`);
+    } else {
+      console.log(`✗ ${id} (no thumbnail found)`);
     }
     await new Promise(r => setTimeout(r, 200));
   }

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// Pełna lista 168 brainrotów: GameRant (luty 2026) + ValuesRBX, PVPBank, wiki
+// Full list of 168 brainrots: GameRant (Feb 2026) + ValuesRBX, PVPBank, wiki
 const LIST = [
   {"name": "Noobini Cakenini", "rarity": "Common", "baseIncome": 2, "tier": "F", "imageUrl": "", "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)"},
   {"name": "Lirili Larila", "rarity": "Common", "baseIncome": 4, "tier": "F", "imageUrl": "", "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)"},
@@ -163,11 +163,11 @@ const out = {
     ],
     totalItems: items.length,
     tiers: "F → D → C → B → A → S → SS → God",
-    mutations: "Lucky (event only); level do 300 mnoży $/s"
+    mutations: "Lucky (event only); level up to 300 multiplies $/s"
   },
   items
 };
 
 const OUT_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
 fs.writeFileSync(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
-console.log('✅ Zapisano', items.length, 'brainrotów do', OUT_PATH);
+console.log('✅ Saved', items.length, 'brainrots to', OUT_PATH);

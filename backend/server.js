@@ -1,18 +1,32 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
+const OpenAI = require('openai').default;
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-app.use(cors());
+const ALLOWED_ORIGINS = [
+  'https://TWOJ-PROJEKT.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173'
+];
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    if (origin.endsWith('.vercel.app')) return cb(null, true);
+    cb(null, false);
+  }
+}));
 app.use(express.json());
 
-const DATA_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
-const IMAGE_MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
+const DATA_PATH = path.join(__dirname, 'data', 'brainrots.json');
+const IMAGE_MAPPING_PATH = path.join(__dirname, 'data', 'image-mapping.json');
 
 const ORIGINAL_IMAGE_BASE = 'https://www.playbrainrot.org/images/characters/';
 
@@ -26,7 +40,7 @@ function loadImageMapping() {
   }
 }
 
-/** Tylko oryginalne URL-e: mapping, item.imageUrl (http), lub playbrainrot.org. Bez placeholderów. */
+/** Only original URLs: mapping, item.imageUrl (http), or playbrainrot.org. No placeholders. */
 function getItemImage(item) {
   const mapping = loadImageMapping();
   if (mapping[item.id] && mapping[item.id].trim()) return mapping[item.id].trim();
@@ -45,7 +59,7 @@ function loadData() {
   return JSON.parse(raw);
 }
 
-// Proxy obrazków (Fandom blokuje hotlink – serwujemy przez backend)
+// Image proxy (Fandom blocks hotlink – we serve via backend)
 app.get('/api/image', (req, res) => {
   const url = req.query.url;
   if (!url || !url.startsWith('http')) {
@@ -109,7 +123,7 @@ app.get('/api/items/:id', (req, res) => {
 const MUTATION_MULTIPLIERS = { Emerald: 1.2, Gold: 1.5, Blood: 2, Diamond: 2.5, Electric: 3 };
 
 // POST calculate trade (body: { yourItems, theirItems, levelMultipliers?: {}, yourMutation?: string, theirMutation?: string })
-// WFL: Win >15%, Fair -10%..15%, Loss <-10%. Wartość = baseIncome * (levelMult lub mutationMult).
+// WFL: Win >15%, Fair -10%..15%, Loss <-10%. Value = baseIncome * (levelMult or mutationMult).
 app.post('/api/calculate-trade', (req, res) => {
   try {
     const { yourItems = [], theirItems = [], levelMultipliers = {}, yourMutation, theirMutation } = req.body;
@@ -165,6 +179,68 @@ app.post('/api/calculate-trade', (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// --- AI Chatbot ---
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+
+app.get('/api/chat/health', (req, res) => {
+  res.json({ ok: true });
+});
+
+app.post('/api/chat', async (req, res) => {
+  if (!openai) {
+    return res.status(503).json({ error: 'OpenAI API key not configured' });
+  }
+  try {
+    const { message, history = [] } = req.body;
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'message is required' });
+    }
+
+    const data = loadData();
+    const brainrotsList = data.items
+      .map(i => `${i.name} | ${i.rarity} | value: ${i.value ?? i.baseIncome ?? i.income ?? 0} | income: ${i.income ?? i.baseIncome ?? 0} $/s`)
+      .join('\n');
+
+    const systemPrompt = `You are an expert on the Roblox game Escape Tsunami for Brainrots.
+You know the values of all brainrots. You help players judge whether a trade is fair.
+Reply briefly and concretely. Use numbers from the data.
+Current brainrots list (name | rarity | value | income):
+${brainrotsList}`;
+
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...history.filter(m => m.role && m.content).map(m => ({ role: m.role, content: m.content })),
+      { role: 'user', content: message }
+    ];
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages,
+      stream: true
+    });
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content;
+      if (content) {
+        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      }
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+  } catch (err) {
+    if (!res.headersSent) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.end();
+    }
   }
 });
 

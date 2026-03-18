@@ -1,7 +1,7 @@
 /**
- * Pobiera URL obrazków z Steal A Brainrot Fandom API
- * i zapisuje do image-mapping.json
- * Uruchom: node scripts/fetch-fandom-images.js
+ * Fetches image URLs from Steal A Brainrot Fandom API
+ * and saves to image-mapping.json
+ * Run: node scripts/fetch-fandom-images.js
  */
 
 const fs = require('fs');
@@ -89,7 +89,7 @@ async function main() {
       found++;
       console.log(`✓ ${item.name}`);
     } else {
-      console.log(`✗ ${item.name} (brak na Fandom)`);
+      console.log(`✗ ${item.name} (not on Fandom)`);
     }
     await new Promise(r => setTimeout(r, 200));
   }
@@ -97,7 +97,7 @@ async function main() {
   const data = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8'));
   data.mapping = mapping;
   fs.writeFileSync(MAPPING_PATH, JSON.stringify(data, null, 2));
-  console.log(`\nZnaleziono ${found} obrazków. Zapisano do image-mapping.json`);
+  console.log(`\nFound ${found} images. Saved to image-mapping.json`);
 }
 
 main().catch(console.error);

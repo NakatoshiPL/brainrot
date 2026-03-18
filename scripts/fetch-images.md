@@ -1,31 +1,31 @@
-# Pobieranie listy i obrazków Brainrots
+# Fetching Brainrots list and images
 
-## Źródła LISTY (wartości, rarity, income)
+## LIST sources (values, rarity, income)
 
-| URL | Zawartość |
-|-----|-----------|
-| https://escapetsunamiforbrainrotswiki.com/escape-tsunami-for-brainrots-value | 93 jednostki, income, rarity |
+| URL | Content |
+|-----|---------|
+| https://escapetsunamiforbrainrotswiki.com/escape-tsunami-for-brainrots-value | 93+ units, income, rarity |
 | https://www.shigjeta.net/escape-tsunami-for-brainrots-trade-values-every-brainrot-ranked-by-income-and-rarity/ | Divine/Infinity, trade values |
-| https://gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values/ | Pełna lista wartości |
-| https://escape-tsunami-for-brainrots.com/wiki | 93+ Brainrots, statystyki |
-| https://traderie.com/escapetsunamiforbrainrots/products | Lista itemów (nazwy) |
+| https://gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values/ | Full value list |
+| https://escape-tsunami-for-brainrots.com/wiki | 93+ Brainrots, stats |
+| https://traderie.com/escapetsunamiforbrainrots/products | Item list (names) |
 
-## Źródła OBRAZKÓW
+## IMAGE sources
 
-| URL | Jak pobrać |
-|-----|-------------|
-| **Traderie** https://traderie.com/escapetsunamiforbrainrots/product/[id] | Strona produktu (np. rainbow-67, burgerini-bearini) – prawy klik na obrazek → Kopiuj adres |
-| **Game8** https://game8.co/games/Roblox/archives/581250 | Lista z miniaturkami – DevTools → inspekcja img |
-| **Steal A Brainrot Fandom** https://stealabrainrot.fandom.com/wiki/[Nazwa] | Np. Noobini_Pizzanini, Tralalero_Tralala – te same postacie |
-| **escapetsunamiforbrainrots.info** https://escapetsunamiforbrainrots.info/brainrots/[id] | Strony postaci (dug-dug-dug, esok-sekolah) |
+| URL | How to fetch |
+|-----|--------------|
+| **Traderie** https://traderie.com/escapetsunamiforbrainrots/product/[id] | Product page (e.g. rainbow-67, burgerini-bearini) – right-click image → Copy address |
+| **Game8** https://game8.co/games/Roblox/archives/581250 | List with thumbnails – DevTools → inspect img |
+| **Steal A Brainrot Fandom** https://stealabrainrot.fandom.com/wiki/[Name] | e.g. Noobini_Pizzanini, Tralalero_Tralala – same characters |
+| **escapetsunamiforbrainrots.info** https://escapetsunamiforbrainrots.info/brainrots/[id] | Character pages (dug-dug-dug, esok-sekolah) |
 
-## Lokalne pliki
+## Local files
 
-Pobierz obrazki i zapisz w `frontend/public/images/brainrots/[id].png`
+Download images and save to `frontend/public/images/brainrots/[id].png`
 
-## Dodawanie do mapowania
+## Adding to mapping
 
-Edytuj `data/image-mapping.json`:
+Edit `data/image-mapping.json`:
 
 ```json
 {
@@ -36,10 +36,10 @@ Edytuj `data/image-mapping.json`:
 }
 ```
 
-- **URL zewnętrzny** – pełny adres (https://…)
-- **Lokalny** – `/images/brainrots/[id].png` (plik w `frontend/public/images/brainrots/`)
+- **External URL** – full address (https://…)
+- **Local** – `/images/brainrots/[id].png` (file in `frontend/public/images/brainrots/`)
 
-## Identyfikatory (id)
+## Identifiers (id)
 
-Użyj `id` z `data/brainrots.json`, np.:  
+Use `id` from `data/brainrots.json`, e.g.:  
 `meta-technetta`, `rainbow-67`, `esok-sekolah`, `pipi-corni`.
