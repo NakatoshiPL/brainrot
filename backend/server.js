@@ -28,8 +28,6 @@ app.use(express.json());
 const DATA_PATH = path.join(__dirname, 'data', 'brainrots.json');
 const IMAGE_MAPPING_PATH = path.join(__dirname, 'data', 'image-mapping.json');
 
-const ORIGINAL_IMAGE_BASE = 'https://www.playbrainrot.org/images/characters/';
-
 function loadImageMapping() {
   try {
     const raw = fs.readFileSync(IMAGE_MAPPING_PATH, 'utf8');
@@ -40,12 +38,12 @@ function loadImageMapping() {
   }
 }
 
-/** Only original URLs: mapping, item.imageUrl (http), or playbrainrot.org. No placeholders. */
+/** Return image URL only when we have a verified mapping or item.imageUrl. No guesswork URL to avoid wrong/fake thumbnails. */
 function getItemImage(item) {
   const mapping = loadImageMapping();
   if (mapping[item.id] && mapping[item.id].trim()) return mapping[item.id].trim();
   if (item.imageUrl && item.imageUrl.startsWith('http')) return item.imageUrl;
-  return ORIGINAL_IMAGE_BASE + item.id + '.webp';
+  return '';
 }
 
 function computeRP(income) {
