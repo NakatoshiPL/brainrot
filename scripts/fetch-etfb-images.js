@@ -7,8 +7,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const BRAINROTS_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
-const MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
+const BRAINROTS_PATH = path.join(__dirname, '..', 'backend', 'data', 'brainrots.json');
+const ROOT_MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
+const BACKEND_MAPPING_PATH = path.join(__dirname, '..', 'backend', 'data', 'image-mapping.json');
 const FANDOM_API = 'https://escape-tsunami-for-brainrots.fandom.com/api.php';
 
 function nameToFandomTitle(name) {
@@ -30,7 +31,7 @@ const ALTERNATIVE_NAMES = {
 };
 
 async function fetchImageUrl(fandomTitle) {
-  const url = `${FANDOM_API}?action=query&titles=${encodeURIComponent(fandomTitle)}&prop=pageimages&format=json&pithumbsize=128`;
+  const url = `${FANDOM_API}?action=query&titles=${encodeURIComponent(fandomTitle)}&prop=pageimages&format=json&pithumbsize=256`;
   try {
     const res = await fetch(url);
     const data = await res.json();
@@ -45,19 +46,38 @@ async function fetchImageUrl(fandomTitle) {
   return null;
 }
 
+function readJson(p) {
+  const raw = fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, '');
+  return JSON.parse(raw);
+}
+
+function writeJson(p, obj) {
+  fs.writeFileSync(p, JSON.stringify(obj, null, 2) + '\n', 'utf8');
+}
+
 async function main() {
-  const brainrots = JSON.parse(fs.readFileSync(BRAINROTS_PATH, 'utf8'));
-  let mapping = {};
-  try {
-    const existing = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8'));
-    mapping = existing.mapping || {};
-  } catch {}
+  const brainrots = readJson(BRAINROTS_PATH);
+  const rootMappingData = readJson(ROOT_MAPPING_PATH);
+  const backendMappingData = readJson(BACKEND_MAPPING_PATH);
+  const rootMapping = rootMappingData.mapping || {};
+  const backendMapping = backendMappingData.mapping || {};
 
   const forceReplace = process.argv.includes('--force');
+  const fillOnly = process.argv.includes('--fill-only');
   let found = 0;
+  let written = 0;
 
   for (const item of brainrots.items) {
-    if (mapping[item.id] && !forceReplace) continue;
+    const rootHas = !!(rootMapping[item.id] && String(rootMapping[item.id]).trim());
+    const backendHas = !!(backendMapping[item.id] && String(backendMapping[item.id]).trim());
+    if (!forceReplace) {
+      if (fillOnly) {
+        if (rootHas && backendHas) continue;
+      } else {
+        // default: fill missing only (safe)
+        if (rootHas && backendHas) continue;
+      }
+    }
 
     const altName = ALTERNATIVE_NAMES[item.id];
     const title = titleForItem(item, altName);
@@ -71,7 +91,14 @@ async function main() {
     }
 
     if (imgUrl) {
-      mapping[item.id] = imgUrl;
+      if (forceReplace || !rootHas) {
+        rootMapping[item.id] = imgUrl;
+        written++;
+      }
+      if (forceReplace || !backendHas) {
+        backendMapping[item.id] = imgUrl;
+        written++;
+      }
       found++;
       console.log(`✓ ${item.name}`);
     } else {
@@ -80,12 +107,18 @@ async function main() {
     await new Promise(r => setTimeout(r, 250));
   }
 
-  const data = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8'));
-  data.mapping = mapping;
-  data._source = 'escape-tsunami-for-brainrots.fandom.com';
-  data._updated = new Date().toISOString().slice(0, 10);
-  fs.writeFileSync(MAPPING_PATH, JSON.stringify(data, null, 2));
-  console.log(`\nFound ${found} images. Saved to image-mapping.json`);
+  rootMappingData.mapping = rootMapping;
+  rootMappingData._source = 'escape-tsunami-for-brainrots.fandom.com';
+  rootMappingData._updated = new Date().toISOString().slice(0, 10);
+  writeJson(ROOT_MAPPING_PATH, rootMappingData);
+
+  backendMappingData.mapping = backendMapping;
+  backendMappingData._source = 'escape-tsunami-for-brainrots.fandom.com';
+  backendMappingData._updated = new Date().toISOString().slice(0, 10);
+  writeJson(BACKEND_MAPPING_PATH, backendMappingData);
+
+  console.log(`\nFound ${found} images. Entries written: ${written}`);
+  console.log(`Updated:\n- ${ROOT_MAPPING_PATH}\n- ${BACKEND_MAPPING_PATH}`);
 }
 
 function titleForItem(item, altName) {
