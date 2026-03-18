@@ -170,3 +170,30 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .chat-widget-fab {
+    bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 520px) {
+  .chat-widget-fab {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .chat-widget-panel {
+    right: 12px;
+    left: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    height: min(70vh, 560px);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .chat-widget-fab:hover {
+    transform: none;
+  }
+}

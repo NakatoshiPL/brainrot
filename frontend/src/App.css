@@ -4,6 +4,12 @@
   padding: 1.5rem;
 }
 
+@supports (padding: env(safe-area-inset-bottom)) {
+  .app {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+}
+
 .app-loading {
   display: flex;
   flex-direction: column;
@@ -58,6 +64,12 @@
   gap: 1rem;
   flex-wrap: wrap;
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    gap: 0.75rem;
+  }
 }
 
 .search-input {
@@ -122,6 +134,41 @@
   gap: 0.75rem;
   max-height: 320px;
   overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.25rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .rarity-select,
+  .pool-toggle {
+    width: 100%;
+  }
+
+  .pool-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    max-height: 45vh;
+  }
+
+  .pool-buttons button {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
 }
 
 .pool-actions {
@@ -228,6 +275,24 @@
 
   .center-column {
     order: -1;
+  }
+
+  .column {
+    padding: 1rem;
+  }
+
+  .column-items {
+    gap: 0.6rem;
+  }
+
+  .item-card {
+    width: 88px;
+    padding: 0.6rem;
+  }
+
+  .item-thumb {
+    width: 72px;
+    height: 72px;
   }
 }
 
@@ -361,6 +426,26 @@
   gap: 0.25rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   pointer-events: none;
+}
+
+/* Touch devices: remove hover-only UI to avoid accidental overlays */
+@media (hover: none), (pointer: coarse) {
+  .item-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .pool-toggle:hover,
+  .sources-toggle:hover,
+  .pool-buttons button:hover {
+    background: inherit;
+    color: inherit;
+    border-color: var(--border);
+  }
+
+  .tooltip {
+    display: none;
+  }
 }
 
 .tooltip-sources,

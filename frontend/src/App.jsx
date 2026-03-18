@@ -191,7 +191,10 @@ export default function App() {
   const [yourItems, setYourItems] = useState([])
   const [theirItems, setTheirItems] = useState([])
   const [tradeResult, setTradeResult] = useState(null)
-  const [poolOpen, setPoolOpen] = useState(true)
+  const [poolOpen, setPoolOpen] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return !window.matchMedia('(max-width: 900px)').matches
+  })
   const [sourcesOpen, setSourcesOpen] = useState(false)
 
   useEffect(() => {
