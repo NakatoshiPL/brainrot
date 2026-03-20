@@ -57,23 +57,68 @@ function loadData() {
   return JSON.parse(raw);
 }
 
-// Image proxy (Fandom blocks hotlink – we serve via backend)
+const IMAGE_PROXY_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+function isAllowedImageProxyHost(hostname) {
+  const h = String(hostname || '').toLowerCase();
+  return (
+    h.endsWith('wikia.nocookie.net') ||
+    h.endsWith('wikia.com') ||
+    h.endsWith('fandom.com') ||
+    h.endsWith('techwiser.com') ||
+    h.endsWith('beebom.com') ||
+    h.endsWith('playbrainrot.org') ||
+    h.endsWith('wp.com')
+  );
+}
+
+// Image proxy (Fandom / TechWiser block browser hotlink without proper headers)
 app.get('/api/image', (req, res) => {
   const url = req.query.url;
   if (!url || !url.startsWith('http')) {
     return res.status(400).send('Missing or invalid url');
   }
-  const client = url.startsWith('https') ? https : http;
-  client.get(url, { headers: { 'Accept': 'image/*' } }, (proxyRes) => {
+  let target;
+  try {
+    target = new URL(url);
+  } catch {
+    return res.status(400).send('Invalid url');
+  }
+  if (!['http:', 'https:'].includes(target.protocol) || !isAllowedImageProxyHost(target.hostname)) {
+    return res.status(403).send('Host not allowed');
+  }
+
+  const lib = target.protocol === 'https:' ? https : http;
+  const port = target.port || (target.protocol === 'https:' ? 443 : 80);
+  const options = {
+    hostname: target.hostname,
+    port,
+    path: target.pathname + target.search,
+    method: 'GET',
+    headers: {
+      Accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+      'User-Agent': IMAGE_PROXY_UA,
+      Referer: `${target.protocol}//${target.host}/`,
+    },
+  };
+
+  const reqOut = lib.request(options, (proxyRes) => {
     if (proxyRes.statusCode !== 200) {
-      res.status(proxyRes.statusCode).end();
+      res.status(proxyRes.statusCode || 502).end();
       return;
     }
     const ct = proxyRes.headers['content-type'] || 'image/png';
+    if (/text\/html/i.test(ct)) {
+      res.status(502).end();
+      return;
+    }
     res.setHeader('Content-Type', ct);
     res.setHeader('Cache-Control', 'public, max-age=86400');
     proxyRes.pipe(res);
-  }).on('error', () => res.status(502).end());
+  });
+  reqOut.on('error', () => res.status(502).end());
+  reqOut.end();
 });
 
 // GET all items

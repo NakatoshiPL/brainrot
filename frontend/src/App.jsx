@@ -2,7 +2,29 @@ import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import './App.css'
 import ChatWidget from './ChatWidget'
 
-const API_BASE = (import.meta.env.VITE_API_URL || '') + '/api'
+const API_ROOT = import.meta.env.VITE_API_URL || ''
+const API_BASE = `${API_ROOT}/api`
+
+/**
+ * Wikia / TechWiser often block <img> hotlinking in the browser.
+ * Load those through our /api/image proxy (same-origin when using VITE_API_URL or Vite dev proxy).
+ */
+function displayImageUrl(raw) {
+  if (!raw || typeof raw !== 'string') return ''
+  const s = raw.trim()
+  if (!s.startsWith('http')) return s
+  const lower = s.toLowerCase()
+  const needsProxy =
+    lower.includes('wikia.nocookie.net') ||
+    lower.includes('fandom.com') ||
+    lower.includes('wikia.com') ||
+    lower.includes('techwiser.com') ||
+    lower.includes('beebom.com')
+  if (needsProxy) {
+    return `${API_ROOT}/api/image?url=${encodeURIComponent(s)}`
+  }
+  return s
+}
 
 function formatIncome(income) {
   if (income >= 1e9) return `${(income / 1e9).toFixed(1)}B`
@@ -32,7 +54,7 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
-  const imageUrl = rawUrl
+  const imageUrl = displayImageUrl(rawUrl)
   const showImage = imageUrl && !imgFailed
 
   return (
@@ -57,7 +79,6 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
           loading="lazy"
           decoding="async"
           fetchPriority="low"
-          referrerPolicy="no-referrer"
           onError={() => setImgFailed(true)}
         />
       ) : (
