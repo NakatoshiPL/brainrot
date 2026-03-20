@@ -14,7 +14,23 @@ A page to compare items from **Escape Tsunami For Brainrots** (Roblox). It calcu
 
 ## Local setup
 
-### Backend (port 3002)
+### Easiest: backend + frontend together (recommended)
+
+From the **project root** (`strona/`):
+
+```bash
+npm install
+cd backend && npm install && cd ..
+cd frontend && npm install && cd ..
+npm run dev:all
+```
+
+Open in the browser: **http://localhost:5173**  
+(API is proxied to the backend on **3002** — do not open `localhost:3002` for the UI; that URL is API-only.)
+
+### Or two terminals
+
+**Terminal 1 – API**
 
 ```bash
 cd backend
@@ -22,7 +38,7 @@ npm install
 npm run dev
 ```
 
-### Frontend (port 5173)
+**Terminal 2 – UI**
 
 ```bash
 cd frontend
@@ -31,6 +47,8 @@ npm run dev
 ```
 
 Open: **http://localhost:5173**
+
+If you see `http proxy error: /api/items` / `ECONNREFUSED` in the Vite terminal, the **backend is not running** — start it with `npm run backend` from the root or `npm run dev` inside `backend/`.
 
 ## Structure
 
