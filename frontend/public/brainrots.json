@@ -1,15 +1,15 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-13",
+    "lastUpdated": "2026-03-20",
     "sources": [
       "gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values (luty 2026)",
       "ValuesRBX",
       "PVPBank",
       "escapetsunamiforbrainrotswiki.com"
     ],
-    "totalItems": 124,
+    "totalItems": 163,
     "tiers": "F → D → C → B → A → S → SS → God",
-    "mutations": "Lucky (event only); level do 300 mnoży $/s"
+    "mutations": "Lucky (event only); level up to 300 multiplies $/s"
   },
   "items": [
     {
@@ -882,17 +882,6 @@
       "imageUrl": ""
     },
     {
-      "id": "dariungini-pandanneli",
-      "name": "Dariungini Pandanneli",
-      "rarity": "Cosmic",
-      "category": "Cosmic",
-      "baseIncome": 190000,
-      "income": 190000,
-      "tier": "S",
-      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
-      "imageUrl": ""
-    },
-    {
       "id": "matteo",
       "name": "Matteo",
       "rarity": "Secret",
@@ -1075,17 +1064,6 @@
       "category": "Secret",
       "baseIncome": 4650000,
       "income": 4650000,
-      "tier": "SS",
-      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
-      "imageUrl": ""
-    },
-    {
-      "id": "capybara-monitora",
-      "name": "Capybara Monitora",
-      "rarity": "Secret",
-      "category": "Secret",
-      "baseIncome": 5090000,
-      "income": 5090000,
       "tier": "SS",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": ""
@@ -1337,8 +1315,8 @@
       "name": "Anububu",
       "rarity": "Infinity",
       "category": "Infinity",
-      "baseIncome": 250000000,
-      "income": 250000000,
+      "baseIncome": 375000000,
+      "income": 375000000,
       "tier": "God",
       "mutationNote": "Lucky + Electric 3x (blender locked)",
       "imageUrl": ""
@@ -1348,8 +1326,8 @@
       "name": "Meta Technetta",
       "rarity": "Infinity",
       "category": "Infinity",
-      "baseIncome": 300000000,
-      "income": 300000000,
+      "baseIncome": 625000000,
+      "income": 625000000,
       "tier": "God",
       "mutationNote": "Lucky + Electric 3x (blender locked)",
       "imageUrl": ""
@@ -1359,8 +1337,8 @@
       "name": "Noobini Infeeny",
       "rarity": "Infinity",
       "category": "Infinity",
-      "baseIncome": 375000000,
-      "income": 375000000,
+      "baseIncome": 250000000,
+      "income": 250000000,
       "tier": "God",
       "mutationNote": "Lucky + Electric 3x (blender locked)",
       "imageUrl": ""
@@ -1374,6 +1352,457 @@
       "income": 400000000,
       "tier": "God",
       "mutationNote": "Lucky + Electric 3x (blender locked)",
+      "imageUrl": ""
+    },
+    {
+      "id": "biscotti-macarotti",
+      "name": "Biscotti Macarotti",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/40/Admin_Biscotti_Macarotti.png/revision/latest/scale-to-width-down/188?cb=20260215182637"
+    },
+    {
+      "id": "biscottino-scheletrino",
+      "name": "Biscottino Scheletrino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b6/Phantom_Biscottino_Scheletrino.png/revision/latest/scale-to-width-down/167?cb=20260312152956"
+    },
+    {
+      "id": "burrascano-spettro-marinaro",
+      "name": "Burrascano Spettro Marinaro",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/1/1a/Phantom_Burrascano_Spettro_Marinaro.png/revision/latest/scale-to-width-down/120?cb=20260314110855"
+    },
+    {
+      "id": "cioccolatone-draghettone",
+      "name": "Cioccolatone Draghettone",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/9/9a/Cioccolatone_Draghettone.png/revision/latest/scale-to-width-down/256?cb=20260217154320"
+    },
+    {
+      "id": "cornettino-fuaco",
+      "name": "Cornettino Fuaco",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/cb/UFO_Cornettino_Fuaco.png/revision/latest/scale-to-width-down/147?cb=20260312152849"
+    },
+    {
+      "id": "crostina-gelifio",
+      "name": "Crostina Gelifio",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/4f/Phantom_Crostina_Gelifio.png/revision/latest/scale-to-width-down/256?cb=20260314111904"
+    },
+    {
+      "id": "cupitron-consoletron",
+      "name": "Cupitron Consoletron",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/c4/Emerald_Cupitron_Consoletron.png/revision/latest/scale-to-width-down/144?cb=20260218175215"
+    },
+    {
+      "id": "din-din-vaultero",
+      "name": "Din Din Vaultero",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/4f/Lucky_Din_Din_Vaultero.png/revision/latest/scale-to-width-down/256?cb=20260204005803"
+    },
+    {
+      "id": "draculini-meowlini",
+      "name": "Draculini Meowlini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/1/1d/Blood_Draculini_Meowlini.png/revision/latest/scale-to-width-down/256?cb=20260223063054"
+    },
+    {
+      "id": "explodini-cataclismi",
+      "name": "Explodini Cataclismi",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/7/70/Base_explodini.png/revision/latest?cb=20260305003304"
+    },
+    {
+      "id": "freezeti-cobretti",
+      "name": "Freezeti Cobretti",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/e/e8/UFO_Freezeti_Cobretti.png/revision/latest/scale-to-width-down/182?cb=20260223232331"
+    },
+    {
+      "id": "gatti-marshmallini",
+      "name": "Gatti Marshmallini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/c8/Gatti-Marshmallini.png/revision/latest/scale-to-width-down/172?cb=20260219124130"
+    },
+    {
+      "id": "gelato-pinguino",
+      "name": "Gelato Pinguino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b4/Phantom_Gelato_Pinguino.png/revision/latest/scale-to-width-down/209?cb=20260314115112"
+    },
+    {
+      "id": "glacierello-infernetti",
+      "name": "Glacierello Infernetti",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/7/72/Radioactive_Glacierello_Infernetti.png/revision/latest/scale-to-width-down/177?cb=20260314131225"
+    },
+    {
+      "id": "ketupastro-infernetto",
+      "name": "Ketupastro Infernetto",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/42/Gold_Ketupastro_Infernetto.png/revision/latest/scale-to-width-down/134?cb=20260222104612"
+    },
+    {
+      "id": "kissarini-heartini",
+      "name": "Kissarini Heartini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b4/Kissarini_Heartini_Image.png/revision/latest/scale-to-width-down/256?cb=20260218064820"
+    },
+    {
+      "id": "la-bruma-celta",
+      "name": "La Bruma Celta",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/c8/LaBrumaCelta.png/revision/latest/scale-to-width-down/114?cb=20260306164327"
+    },
+    {
+      "id": "la-vaca-nebulosa-frostina",
+      "name": "La Vaca Nebulosa Frostina",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/4f/Shamrock_La_Vaca_Nebulosa_Frostina.gif/revision/latest/scale-to-width-down/228?cb=20260314190143"
+    },
+    {
+      "id": "los-combinasionas",
+      "name": "Los Combinasionas",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/41/Los_Combinasionas_New.png/revision/latest/scale-to-width-down/189?cb=20260228095311"
+    },
+    {
+      "id": "marietti-frigo",
+      "name": "Marietti Frigo",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/e/e3/Marietti_Frigo.png/revision/latest/scale-to-width-down/256?cb=20260218113558"
+    },
+    {
+      "id": "pastapot-infernetto",
+      "name": "Pastapot Infernetto",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/4c/Money_Pastapot_Infernetto.png/revision/latest/scale-to-width-down/256?cb=20260223063815"
+    },
+    {
+      "id": "polpo-semaforini",
+      "name": "Polpo Semaforini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/3/3e/Emerald_Polpo_Semaforini.png/revision/latest/scale-to-width-down/197?cb=20260314113027"
+    },
+    {
+      "id": "rubichetto-cubini",
+      "name": "Rubichetto Cubini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/3/30/Money_Rubichetto_Cubini.jpg/revision/latest/scale-to-width-down/256?cb=20260215094338"
+    },
+    {
+      "id": "sausaggini-sanitario",
+      "name": "Sausaggini Sanitario",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/1/13/Sausaggini_Sanitario.png/revision/latest/scale-to-width-down/170?cb=20260218161152"
+    },
+    {
+      "id": "tartarughi-attrezzini",
+      "name": "Tartarughi Attrezzini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/cb/Shamrock_Tartarughi_Attrezzini.gif/revision/latest/scale-to-width-down/237?cb=20260314185637"
+    },
+    {
+      "id": "arcobaleno-camellino",
+      "name": "Arcobaleno Camellino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "capybara-monitora",
+      "name": "Capybara Monitora",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "centrifuga-narwhalus-rex",
+      "name": "Centrifuga Narwhalus Rex",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "crystallini-masterclockini",
+      "name": "Crystallini Masterclockini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "dariungini-pandanneli",
+      "name": "Dariungini Pandanneli",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "don-magmito",
+      "name": "Don Magmito",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "doomini-tiktookini",
+      "name": "Doomini Tiktookini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/41/Doomini_Tiktookini.png/revision/latest/scale-to-width-down/256?cb=20260319115658"
+    },
+    {
+      "id": "dutchmello-velerino",
+      "name": "Dutchmello Velerino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "fantasmelli-pipistrelli",
+      "name": "Fantasmelli Pipistrelli",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "happini-sadini",
+      "name": "Happini Sadini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/f/f4/Maxresdefault_%2816%29.jpg/revision/latest/scale-to-width-down/256?cb=20260319225348"
+    },
+    {
+      "id": "luck-luck-luck",
+      "name": "Luck Luck Luck",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/7/7c/Luckluckluck.png/revision/latest/scale-to-width-down/200?cb=20260317162814"
+    },
+    {
+      "id": "nebuluck",
+      "name": "Nebuluck",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "scaldarino-derpino",
+      "name": "Scaldarino Derpino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "shamrock-shake-serpentissimo",
+      "name": "Shamrock Shake Serpentissimo",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b5/ShamrockShakeSerpentissimo.jpeg/revision/latest/scale-to-width-down/178?cb=20260318093909"
+    },
+    {
+      "id": "shamrocko",
+      "name": "Shamrocko",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/a/aa/Shamrock_Froggo.png/revision/latest/scale-to-width-down/238?cb=20260313173706"
+    },
+    {
+      "id": "tostino-flambante",
+      "name": "Tostino Flambante",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": ""
     }
   ]

@@ -7,7 +7,9 @@
     "dev": "npm run frontend",
     "update-values": "node scripts/update-values.js",
     "detect-new": "node scripts/detect-new-brainrots.js",
-    "add-wiki-items": "node scripts/add-more-items-from-wiki.js"
+    "add-wiki-items": "node scripts/add-more-items-from-wiki.js",
+    "fill-etfb-images": "node scripts/fetch-etfb-images.js --fill-only",
+    "fill-wiki-search-images": "node scripts/fill-missing-images-wiki-search.js"
   },
   "devDependencies": {
     "axios": "^1.13.6",

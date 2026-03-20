@@ -1,13 +1,13 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-17",
+    "lastUpdated": "2026-03-20",
     "sources": [
       "gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values (luty 2026)",
       "ValuesRBX",
       "PVPBank",
       "escapetsunamiforbrainrotswiki.com"
     ],
-    "totalItems": 147,
+    "totalItems": 163,
     "tiers": "F → D → C → B → A → S → SS → God",
     "mutations": "Lucky (event only); level up to 300 multiplies $/s"
   },
@@ -1628,6 +1628,182 @@
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/cb/Shamrock_Tartarughi_Attrezzini.gif/revision/latest/scale-to-width-down/237?cb=20260314185637"
+    },
+    {
+      "id": "arcobaleno-camellino",
+      "name": "Arcobaleno Camellino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "capybara-monitora",
+      "name": "Capybara Monitora",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "centrifuga-narwhalus-rex",
+      "name": "Centrifuga Narwhalus Rex",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "crystallini-masterclockini",
+      "name": "Crystallini Masterclockini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "dariungini-pandanneli",
+      "name": "Dariungini Pandanneli",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "don-magmito",
+      "name": "Don Magmito",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "doomini-tiktookini",
+      "name": "Doomini Tiktookini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/41/Doomini_Tiktookini.png/revision/latest/scale-to-width-down/256?cb=20260319115658"
+    },
+    {
+      "id": "dutchmello-velerino",
+      "name": "Dutchmello Velerino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "fantasmelli-pipistrelli",
+      "name": "Fantasmelli Pipistrelli",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "happini-sadini",
+      "name": "Happini Sadini",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/f/f4/Maxresdefault_%2816%29.jpg/revision/latest/scale-to-width-down/256?cb=20260319225348"
+    },
+    {
+      "id": "luck-luck-luck",
+      "name": "Luck Luck Luck",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/7/7c/Luckluckluck.png/revision/latest/scale-to-width-down/200?cb=20260317162814"
+    },
+    {
+      "id": "nebuluck",
+      "name": "Nebuluck",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "scaldarino-derpino",
+      "name": "Scaldarino Derpino",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
+    },
+    {
+      "id": "shamrock-shake-serpentissimo",
+      "name": "Shamrock Shake Serpentissimo",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b5/ShamrockShakeSerpentissimo.jpeg/revision/latest/scale-to-width-down/178?cb=20260318093909"
+    },
+    {
+      "id": "shamrocko",
+      "name": "Shamrocko",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/a/aa/Shamrock_Froggo.png/revision/latest/scale-to-width-down/238?cb=20260313173706"
+    },
+    {
+      "id": "tostino-flambante",
+      "name": "Tostino Flambante",
+      "rarity": "Common",
+      "category": "Common",
+      "baseIncome": 0,
+      "income": 0,
+      "tier": "F",
+      "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
+      "imageUrl": ""
     }
   ]
 }

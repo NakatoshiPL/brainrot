@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import './App.css'
 import ChatWidget from './ChatWidget'
 
@@ -28,7 +28,7 @@ function getRarityColor(rarity) {
   return map[rarity] || 'var(--text-muted)'
 }
 
-function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
+const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
@@ -55,6 +55,8 @@ function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
           alt={item.name}
           className="item-thumb"
           loading="lazy"
+          decoding="async"
+          fetchPriority="low"
           referrerPolicy="no-referrer"
           onError={() => setImgFailed(true)}
         />
@@ -78,7 +80,9 @@ function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
       )}
     </div>
   )
-}
+})
+
+ItemCard.displayName = 'ItemCard'
 
 function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId }) {
   const [dragOver, setDragOver] = useState(false)
@@ -248,11 +252,11 @@ export default function App() {
       .catch(() => setTradeResult(computeWFL(yourIncome, theirIncome)))
   }, [items, yourItems, theirItems])
 
-  const filteredItems = items.filter(item => {
+  const filteredItems = useMemo(() => items.filter(item => {
     const matchSearch = !search || item.name.toLowerCase().includes(search.toLowerCase())
     const matchRarity = !rarityFilter || item.rarity === rarityFilter
     return matchSearch && matchRarity
-  })
+  }), [items, search, rarityFilter])
 
   const rarities = [...new Set(items.map(i => i.rarity))].sort((a, b) => {
     const order = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythical', 'Cosmic', 'Secret', 'Celestial', 'Divine', 'Infinity']

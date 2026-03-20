@@ -134,6 +134,9 @@
   gap: 0.75rem;
   max-height: 320px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 @media (max-width: 600px) {
@@ -175,6 +178,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 140px 88px;
 }
 
 .pool-buttons {

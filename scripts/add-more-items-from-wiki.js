@@ -8,6 +8,9 @@ const path = require('path');
 
 const BRAINROTS_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
 const MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
+const BACKEND_BRAINROTS_PATH = path.join(__dirname, '..', 'backend', 'data', 'brainrots.json');
+const BACKEND_MAPPING_PATH = path.join(__dirname, '..', 'backend', 'data', 'image-mapping.json');
+const PUBLIC_BRAINROTS_PATH = path.join(__dirname, '..', 'frontend', 'public', 'brainrots.json');
 const ETFB_API = 'https://escape-tsunami-for-brainrots.fandom.com/api.php';
 
 function slug(name) {
@@ -123,7 +126,12 @@ async function main() {
   mappingData.mapping = mapping;
   fs.writeFileSync(MAPPING_PATH, JSON.stringify(mappingData, null, 2), 'utf8');
 
-  console.log(`\nAdded ${toAdd.length} items. Total: ${brainrotsData.items.length}. Run download-images.js to save new images locally.`);
+  fs.copyFileSync(BRAINROTS_PATH, BACKEND_BRAINROTS_PATH);
+  fs.copyFileSync(MAPPING_PATH, BACKEND_MAPPING_PATH);
+  fs.copyFileSync(BRAINROTS_PATH, PUBLIC_BRAINROTS_PATH);
+
+  console.log(`\nAdded ${toAdd.length} items. Total: ${brainrotsData.items.length}.`);
+  console.log('Synced backend/data + frontend/public/brainrots.json');
 }
 
 main().catch(console.error);

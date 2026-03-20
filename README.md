@@ -4,7 +4,7 @@ A page to compare items from **Escape Tsunami For Brainrots** (Roblox). It calcu
 
 ## Features
 
-- **Full Brainrots list** – 150+ items from sources: escapetsunamiforbrainrotswiki.com, shigjeta.net
+- **Full Brainrots list** – 160+ items from sources: escapetsunamiforbrainrotswiki.com, shigjeta.net, ETFB Fandom
 - **3 columns** – Your items | Difference | Their items
 - **Trade calculator** – Difference = sum(Theirs) − sum(Yours), result: Big Win / Win / Fair / Loss / Big Loss
 - **Search** – by item name
@@ -95,4 +95,6 @@ Tier list **F → D → C → B → A → S → SS → God**, mutations (Lucky, 
 - **POST /api/chat** — chatbot for players (streaming, trade advice)
 - **npm run update-values** — `node scripts/update-values.js` — update values from shigjeta.net
 - **npm run detect-new** — `node scripts/detect-new-brainrots.js` — detect new brainrots from Fandom wiki
-- **npm run add-wiki-items** — `node scripts/add-more-items-from-wiki.js` — add missing items from wiki Category:Brainrots
+- **npm run add-wiki-items** — `node scripts/add-more-items-from-wiki.js` — add missing items from wiki Category:Brainrots (syncs `backend/data` + `frontend/public/brainrots.json`)
+- **npm run fill-etfb-images** — fill missing thumbnails from ETFB wiki `pageimages`
+- **npm run fill-wiki-search-images** — fill remaining gaps via safe wiki search (skips misleading Lucky Block pages)
