@@ -73,20 +73,21 @@ function isAllowedImageProxyHost(hostname) {
   );
 }
 
-// Image proxy (Fandom / TechWiser block browser hotlink without proper headers)
-app.get('/api/image', (req, res) => {
-  const url = req.query.url;
-  if (!url || !url.startsWith('http')) {
-    return res.status(400).send('Missing or invalid url');
+function proxyImageOnce(urlStr, clientRes, depth = 0) {
+  if (depth > 6) {
+    clientRes.status(502).end();
+    return;
   }
   let target;
   try {
-    target = new URL(url);
+    target = new URL(urlStr);
   } catch {
-    return res.status(400).send('Invalid url');
+    clientRes.status(400).send('Invalid url');
+    return;
   }
   if (!['http:', 'https:'].includes(target.protocol) || !isAllowedImageProxyHost(target.hostname)) {
-    return res.status(403).send('Host not allowed');
+    clientRes.status(403).send('Host not allowed');
+    return;
   }
 
   const lib = target.protocol === 'https:' ? https : http;
@@ -104,21 +105,59 @@ app.get('/api/image', (req, res) => {
   };
 
   const reqOut = lib.request(options, (proxyRes) => {
-    if (proxyRes.statusCode !== 200) {
-      res.status(proxyRes.statusCode || 502).end();
+    const code = proxyRes.statusCode || 0;
+    if ([301, 302, 303, 307, 308].includes(code)) {
+      const loc = proxyRes.headers.location;
+      proxyRes.resume();
+      if (!loc) {
+        clientRes.status(502).end();
+        return;
+      }
+      let nextUrl;
+      try {
+        nextUrl = new URL(loc, urlStr).href;
+      } catch {
+        clientRes.status(502).end();
+        return;
+      }
+      let nextHost;
+      try {
+        nextHost = new URL(nextUrl).hostname;
+      } catch {
+        clientRes.status(502).end();
+        return;
+      }
+      if (!isAllowedImageProxyHost(nextHost)) {
+        clientRes.status(403).end();
+        return;
+      }
+      return proxyImageOnce(nextUrl, clientRes, depth + 1);
+    }
+
+    if (code !== 200) {
+      clientRes.status(code || 502).end();
       return;
     }
     const ct = proxyRes.headers['content-type'] || 'image/png';
     if (/text\/html/i.test(ct)) {
-      res.status(502).end();
+      clientRes.status(502).end();
       return;
     }
-    res.setHeader('Content-Type', ct);
-    res.setHeader('Cache-Control', 'public, max-age=86400');
-    proxyRes.pipe(res);
+    clientRes.setHeader('Content-Type', ct);
+    clientRes.setHeader('Cache-Control', 'public, max-age=86400');
+    proxyRes.pipe(clientRes);
   });
-  reqOut.on('error', () => res.status(502).end());
+  reqOut.on('error', () => clientRes.status(502).end());
   reqOut.end();
+}
+
+// Image proxy (Fandom / TechWiser block browser hotlink without proper headers)
+app.get('/api/image', (req, res) => {
+  const url = req.query.url;
+  if (!url || !url.startsWith('http')) {
+    return res.status(400).send('Missing or invalid url');
+  }
+  proxyImageOnce(url, res, 0);
 });
 
 // GET all items

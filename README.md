@@ -116,3 +116,4 @@ Tier list **F → D → C → B → A → S → SS → God**, mutations (Lucky, 
 - **npm run add-wiki-items** — `node scripts/add-more-items-from-wiki.js` — add missing items from wiki Category:Brainrots (syncs `backend/data` + `frontend/public/brainrots.json`)
 - **npm run fill-etfb-images** — fill missing thumbnails from ETFB wiki `pageimages`
 - **npm run fill-wiki-search-images** — fill remaining gaps via safe wiki search (skips misleading Lucky Block pages)
+- **npm run prefer-playbrainrot** — merge **playbrainrot.org** `.webp` URLs (in-game art) on top of TechWiser/wiki, then copy mapping to `backend/data/`

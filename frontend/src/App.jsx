@@ -55,6 +55,11 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
   const imageUrl = displayImageUrl(rawUrl)
+
+  useEffect(() => {
+    setImgFailed(false)
+  }, [rawUrl, imageUrl])
+
   const showImage = imageUrl && !imgFailed
 
   return (

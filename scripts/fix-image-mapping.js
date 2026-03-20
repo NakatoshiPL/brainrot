@@ -411,37 +411,63 @@ function norm(s) {
     .trim();
 }
 
+/**
+ * Default: --merge (keep wiki/TechWiser URLs for items without a playbrainrot slug).
+ * Use --replace to rebuild mapping from playbrainrot only (drops other sources).
+ */
+const replace = process.argv.includes('--replace');
+const merge = !replace;
+
+let existingMapping = {};
+if (merge) {
+  try {
+    const prev = JSON.parse(fs.readFileSync(OUT_PATH, 'utf8').replace(/^\uFEFF/, ''));
+    existingMapping = prev.mapping || {};
+  } catch (_) {}
+}
+
 const data = JSON.parse(fs.readFileSync(BRAINROTS_PATH, 'utf8'));
-const mapping = {};
+const mapping = merge ? { ...existingMapping } : {};
 const found = [];
 const missing = [];
 
 for (const item of data.items) {
   const key = norm(item.name);
+  let pbUrl = null;
   const slug = PLAYBRAINROT[key];
   if (slug) {
-    mapping[item.id] = `${BASE}${slug}.webp`;
-    found.push(`  ✅ ${item.id.padEnd(35)} ← ${slug}.webp`);
+    pbUrl = `${BASE}${slug}.webp`;
   } else {
-    // Try ID as slug too
     const idSlug = item.id.replace(/_/g, '-');
-    if (PLAYBRAINROT[norm(idSlug.replace(/-/g, ' '))]) {
-      const s = PLAYBRAINROT[norm(idSlug.replace(/-/g, ' '))];
-      mapping[item.id] = `${BASE}${s}.webp`;
-      found.push(`  ✅ ${item.id.padEnd(35)} ← (via id) ${s}.webp`);
-    } else {
-      missing.push(`  ❌ ${item.id.padEnd(35)} → "${item.name}" (searched: "${key}")`);
+    const nk = norm(idSlug.replace(/-/g, ' '));
+    if (PLAYBRAINROT[nk]) {
+      pbUrl = `${BASE}${PLAYBRAINROT[nk]}.webp`;
     }
+  }
+
+  if (pbUrl) {
+    mapping[item.id] = pbUrl;
+    found.push(`  ✅ ${item.id.padEnd(35)} ← ${pbUrl.replace(BASE, '')}`);
+  } else if (!merge) {
+    missing.push(`  ❌ ${item.id.padEnd(35)} → "${item.name}" (searched: "${key}")`);
+  } else if (!mapping[item.id]) {
+    missing.push(`  ❌ ${item.id.padEnd(35)} → "${item.name}" (no playbrainrot + no existing URL)`);
   }
 }
 
-fs.writeFileSync(OUT_PATH, JSON.stringify({ mapping }, null, 2), 'utf8');
+const out = {
+  mapping,
+  _source: merge ? 'playbrainrot.org (preferred) + wiki/TechWiser fallback' : 'playbrainrot.org only',
+};
+if (merge) out._playbrainrotMerged = new Date().toISOString().slice(0, 10);
 
-console.log(`\n✅ Mapped: ${found.length}/${data.items.length}`);
-found.forEach(l => console.log(l));
+fs.writeFileSync(OUT_PATH, JSON.stringify(out, null, 2) + '\n', 'utf8');
+
+console.log(`\n✅ Playbrainrot URLs: ${found.length}/${data.items.length}${merge ? ' (merged)' : ' (replace mode)'}`);
+found.forEach((l) => console.log(l));
 
 if (missing.length) {
-  console.log(`\n⚠️  No match for ${missing.length} items:`);
-  missing.forEach(m => console.log(m));
+  console.log(`\n⚠️  No playbrainrot match for ${missing.length} items:`);
+  missing.forEach((m) => console.log(m));
 }
 console.log(`\n📁 Saved: ${OUT_PATH}`);

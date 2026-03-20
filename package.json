@@ -10,7 +10,8 @@
     "detect-new": "node scripts/detect-new-brainrots.js",
     "add-wiki-items": "node scripts/add-more-items-from-wiki.js",
     "fill-etfb-images": "node scripts/fetch-etfb-images.js --fill-only",
-    "fill-wiki-search-images": "node scripts/fill-missing-images-wiki-search.js"
+    "fill-wiki-search-images": "node scripts/fill-missing-images-wiki-search.js",
+    "prefer-playbrainrot": "node scripts/fix-image-mapping.js && node -e \"require('fs').copyFileSync('data/image-mapping.json','backend/data/image-mapping.json')\""
   },
   "devDependencies": {
     "axios": "^1.13.6",
