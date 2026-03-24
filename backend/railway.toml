@@ -1,0 +1,6 @@
+# Railway: w ustawieniach serwisu ustaw Root Directory na folder "backend" (ten plik jest opcjonalny).
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm start"

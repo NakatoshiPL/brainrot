@@ -1,7 +1,13 @@
 /**
- * Maps brainrots to Beebom image URLs
- * Source: https://beebom.com/all-brainrots-in-escape-tsunami-for-brainrots/
- * Run: node scripts/fetch-beebom-images.js
+ * Beebom article thumbnails (same filenames as Beebom’s Escape Tsunami list).
+ * https://beebom.com/all-brainrots-in-escape-tsunami-for-brainrots/
+ *
+ * --beebom-only  → wipe mapping to {} then set ONLY Beebom URLs (trusted base; no playbrainrot/TechWiser).
+ * default        → merge with existing image-mapping.json and overlay Beebom for every BEEBOM_FILENAMES id.
+ *
+ * Recommended pipeline (no random third-party art):
+ *   node scripts/fetch-beebom-images.js --beebom-only
+ *   node scripts/fetch-etfb-images.js --fill-only
  */
 
 const fs = require('fs');
@@ -9,22 +15,24 @@ const path = require('path');
 
 const BRAINROTS_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
 const MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
+const BACKEND_MAPPING_PATH = path.join(__dirname, '..', 'backend', 'data', 'image-mapping.json');
+const PUBLIC_MAPPING_PATH = path.join(__dirname, '..', 'frontend', 'public', 'image-mapping.json');
 const BEEBOM_BASE = 'https://static.beebom.com/wp-content/uploads/2026/01';
 
-// Beebom uses specific filenames - map our id to their filename
+/** Filenames from Beebom static CDN (must match our `id` in brainrots.json) */
 const BEEBOM_FILENAMES = {
   '67': '67.jpg',
-  'alessio': 'Alessio.jpg',
+  alessio: 'Alessio.jpg',
   'aura-farma': 'Aura-Farma.jpg',
   'avocadini-antilopini': 'Avocadini-Antilopini.jpg',
-  'avocadorilla': 'Avocadorilla.jpg',
+  avocadorilla: 'Avocadorilla.jpg',
   'avocadini-guffo': 'Avocadini-Guffo.jpg',
   'ballerino-lololo': 'Ballerino-Lololo.jpg',
   'ballerina-cappuccina': 'Ballerina-Cappuccina.jpg',
   'bananita-dolphinita': 'Bananita-Dolphinita.jpg',
   'bambini-crostini': 'Bambini-Crostini.jpg',
-  'bisonte-gupitere': 'Bisonte-Gupitere.jpg',
-  'bombardilo-crocodilo': 'Bombardilo-Crocodilo.jpg',
+  'bisonte-giuppitere': 'Bisonte-Gupitere.jpg',
+  'bombardiro-crocodilo': 'Bombardilo-Crocodilo.jpg',
   'bombombini-gusini': 'Bombombini-Gusini.jpg',
   'boneca-ambalabu': 'Boneca-Ambalabu.jpg',
   'bobrito-bandito': 'Bobrito-Bandito.jpg',
@@ -51,9 +59,8 @@ const BEEBOM_FILENAMES = {
   'frulli-frulla': 'Frulli-Frulla.jpg',
   'ganganzelli-trulala': 'Ganganzelli-Trulala.jpg',
   'gangster-footera': 'Gangster-Footera.jpg',
-  'garama-madundung': 'Garama-and-Madundung.jpg',
-  'gattatino-nyanino': 'Gattatino-Nyanino.jpg',
-  'gattatino-neonino': 'Gattatino-Neonino.jpg',
+  'garama-and-madundung': 'Garama-and-Madundung.jpg',
+  'gattatino-neonino': 'Gattatino-Nyanino.jpg',
   'giraffa-celeste': 'Giraffa-Celeste.jpg',
   'glorbo-fruttodrillo': 'Glorbo-Fruttodrillo.jpg',
   'gorillo-watermelondrillo': 'Gorillo-Watermelondrillo.jpg',
@@ -71,12 +78,12 @@ const BEEBOM_FILENAMES = {
   'los-orcaleritos': 'Los-Orcaleritos.jpg',
   'los-tralaleritos': 'Los-Tralaleritos.jpg',
   'los-tungtungtungcitos': 'Los-Tungtungtungcitos.jpg',
-  'matteo': 'Matteo.jpg',
+  matteo: 'Matteo.jpg',
   'money-elephant': 'Money-Elephant.jpg',
   'nuclearo-dinossauro': 'Nuclearo-Dinossauro.jpg',
   'noobini-cakenini': 'Noobini-Cakenini.jpg',
   'onionello-penguini': 'Onionello-Penguini.jpg',
-  'orangutini-ananassini': 'Orangutini-Ananassini.jpg',
+  'orangutini-ananasini': 'Orangutini-Ananassini.jpg',
   'orcalero-orcala': 'Orcalero-Orcala.jpg',
   'patito-dinerito': 'Patito-Dinerito.jpg',
   'patatino-astronauta': 'Patatino-Astronauta.jpg',
@@ -98,7 +105,7 @@ const BEEBOM_FILENAMES = {
   'spioniro-golubiro': 'Spioniro-Golubiro.jpg',
   'statutino-libertino': 'Statutino-Libertino.jpg',
   'strawberry-elephant': 'Strawberry-Elephant.jpg',
-  'strawberrilli-flamengilli': 'Strawberrilli-Flamengilli.jpg',
+  'strawberrelli-flamingelli': 'Strawberrilli-Flamengilli.jpg',
   'svinino-bombondino': 'Svinino-Bombondino.jpg',
   'ta-ta-ta-sahur': 'Ta-Ta-Ta-Sahur.jpg',
   'talpa-di-fero': 'Talpa-Di-Fero.jpg',
@@ -120,7 +127,7 @@ const BEEBOM_FILENAMES = {
   'unclito-samito': 'Uncle-Sam.jpg',
   'zibra-zubra-zibralini': 'Zibra-Zubra-Zibralini.jpg',
   'zung-zung-zung-lazur': 'Zung-Zung-Zung-Lazur.jpg',
-  'diamantusa': 'Diamantusa.jpg',
+  diamantusa: 'Diamantusa.jpg',
   'kissarini-heartini': 'Kissarini-Heartini.jpg',
   'capybara-monitora': 'Capybara-Monitora.jpg',
   'grappellino-doro': "Grappellino-D'Oro.jpg",
@@ -130,44 +137,53 @@ const BEEBOM_FILENAMES = {
   'job-job-sahur': 'Job-Job-Sahur.jpg',
   'blueberrinni-octopussini': 'Blueberrinni-Octopussini.jpg',
   'meta-technetta': 'Meta-Technetta.jpg',
-  'anububu': 'Anububu.jpg',
+  anububu: 'Anububu.jpg',
   'noobini-infeeny': 'Noobini-Infeeny.jpg',
   'cupitron-consoletron': 'Cupitron-Consoletron.jpg',
   'freezeti-cobretti': 'Freezeti-Cobretti.jpg',
   'rubichetto-cubini': 'Rubichetto-Cubini.jpg',
   'galactio-fantasma': 'Galactio-Fantasma.jpg',
   'biscotti-macarotti': 'Biscotti-Macarotti.jpg',
-  'glacierello-inferniti': 'Glacierello-Inferniti.jpg',
+  'glacierello-infernetti': 'Glacierello-Inferniti.jpg'
 };
 
-// Items not on Beebom - keep placeholder or try name-based URL
-function nameToBeebomFile(name) {
-  return name.replace(/\s+/g, '-').replace(/'/g, '') + '.jpg';
-}
-
-async function main() {
+function main() {
+  const beebomOnly = process.argv.includes('--beebom-only');
   const brainrots = JSON.parse(fs.readFileSync(BRAINROTS_PATH, 'utf8'));
   let data = {};
-  try {
-    data = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8'));
-  } catch {}
-  const mapping = data.mapping || {};
+  if (beebomOnly) {
+    data = { mapping: {}, _source: 'beebom.com (article CDN) — base reset' };
+  } else {
+    try {
+      data = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8').replace(/^\uFEFF/, ''));
+    } catch (_) {
+      data = {};
+    }
+  }
+  const mapping = { ...(data.mapping || {}) };
 
+  let beebomCount = 0;
   for (const item of brainrots.items) {
     const filename = BEEBOM_FILENAMES[item.id];
-    if (filename) {
-      mapping[item.id] = `${BEEBOM_BASE}/${filename}?w=150`;
-    } else {
-      const fallback = `${BEEBOM_BASE}/${nameToBeebomFile(item.name)}?w=150`;
-      mapping[item.id] = fallback;
-    }
+    if (!filename) continue;
+    mapping[item.id] = `${BEEBOM_BASE}/${filename}`;
+    beebomCount++;
   }
 
   data.mapping = mapping;
-  data._source = 'beebom.com';
-  data._sources_images = ['https://beebom.com/all-brainrots-in-escape-tsunami-for-brainrots/'];
-  fs.writeFileSync(MAPPING_PATH, JSON.stringify(data, null, 2));
-  console.log(`Updated ${Object.keys(mapping).length} image URLs from Beebom`);
+  data._source = beebomOnly
+    ? 'beebom.com (article thumbnails only; run ETFB fill for gaps)'
+    : 'merged + beebom.com overlays';
+  data._beebomOverlay = new Date().toISOString().slice(0, 10);
+  const out = JSON.stringify(data, null, 2) + '\n';
+  fs.writeFileSync(MAPPING_PATH, out, 'utf8');
+  fs.writeFileSync(BACKEND_MAPPING_PATH, out, 'utf8');
+  if (fs.existsSync(path.dirname(PUBLIC_MAPPING_PATH))) {
+    fs.writeFileSync(PUBLIC_MAPPING_PATH, out, 'utf8');
+  }
+
+  console.log(`Beebom URLs set: ${beebomCount}${beebomOnly ? ' (mapping reset to Beebom-only first)' : ''}`);
+  console.log(`Updated: ${MAPPING_PATH}, backend, frontend/public`);
 }
 
-main().catch(console.error);
+main();

@@ -9,9 +9,17 @@
     "update-values": "node scripts/update-values.js",
     "detect-new": "node scripts/detect-new-brainrots.js",
     "add-wiki-items": "node scripts/add-more-items-from-wiki.js",
+    "strip-no-thumb-brainrots": "node scripts/remove-no-thumb-brainrots.js",
     "fill-etfb-images": "node scripts/fetch-etfb-images.js --fill-only",
     "fill-wiki-search-images": "node scripts/fill-missing-images-wiki-search.js",
-    "prefer-playbrainrot": "node scripts/fix-image-mapping.js && node -e \"require('fs').copyFileSync('data/image-mapping.json','backend/data/image-mapping.json')\""
+    "prefer-playbrainrot": "node scripts/fix-image-mapping.js --replace && node -e \"const fs=require('fs'); fs.copyFileSync('data/image-mapping.json','backend/data/image-mapping.json'); fs.copyFileSync('data/image-mapping.json','frontend/public/image-mapping.json');\"",
+    "fill-beebom-images": "node scripts/fetch-beebom-images.js --beebom-only && node scripts/fetch-etfb-images.js --fill-only",
+    "rebuild-images": "npm run fill-beebom-images",
+    "fill-empty-images": "node scripts/fill-empty-wiki-images.js",
+    "sync-data": "node scripts/sync-brainrots-data.js",
+    "cache-thumbnails": "node scripts/cache-local-thumbnails.js",
+    "fill-ui-sources": "node scripts/fill-images-from-ui-sources.js",
+    "fill-ui-sources-tba": "node scripts/fill-images-from-ui-sources.js --allow-tba"
   },
   "devDependencies": {
     "axios": "^1.13.6",

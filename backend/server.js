@@ -11,9 +11,15 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 const ALLOWED_ORIGINS = [
+  'https://etbvalues.com',
+  'https://www.etbvalues.com',
   'https://TWOJ-PROJEKT.vercel.app',
   'http://localhost:3000',
-  'http://localhost:5173'
+  'http://localhost:5173',
+  ...(process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean),
 ];
 app.use(cors({
   origin: (origin, cb) => {
@@ -69,7 +75,16 @@ function isAllowedImageProxyHost(hostname) {
     h.endsWith('techwiser.com') ||
     h.endsWith('beebom.com') ||
     h.endsWith('playbrainrot.org') ||
-    h.endsWith('wp.com')
+    h.endsWith('wp.com') ||
+    h.endsWith('game8.co') ||
+    h.endsWith('traderie.com') ||
+    h.endsWith('progameguides.com') ||
+    h.endsWith('itemku.com') ||
+    h.endsWith('shigjeta.net') ||
+    h.endsWith('escape-tsunami-for-brainrots.com') ||
+    h.endsWith('escapetsunamiforbrainrots.com') ||
+    h.endsWith('escapetsunamiforbrainrots.org') ||
+    h.endsWith('gamerant.com')
   );
 }
 
@@ -326,6 +341,9 @@ ${brainrotsList}`;
   }
 });
 
+const { startAutoUpdate } = require('./scheduler');
+
 app.listen(PORT, () => {
   console.log(`Brainrots API running on http://localhost:${PORT}`);
+  startAutoUpdate(path.join(__dirname, '..'));
 });

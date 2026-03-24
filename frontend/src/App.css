@@ -237,11 +237,11 @@
 
 .sources-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem 2rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
   .sources-grid {
     grid-template-columns: 1fr;
   }
@@ -264,6 +264,17 @@
 
 .sources-content a:hover {
   text-decoration: underline;
+}
+
+.sources-content code {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.sources-content .sources-muted {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.35;
 }
 
 .vergelijking {
@@ -401,9 +412,11 @@
   display: block;
   margin: 0 auto 0.35rem;
   object-fit: contain;
-  background: rgba(0, 0, 0, 0.22);
+  object-position: center;
+  background: rgba(0, 0, 0, 0.35);
   border: 1px solid var(--border);
   padding: 4px;
+  color-scheme: dark;
 }
 
 .item-thumb-text {

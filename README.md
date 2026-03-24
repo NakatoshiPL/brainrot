@@ -75,14 +75,14 @@ project/
 
 ## Images (thumbnails)
 
-**Current:** Placeholders or images from `data/image-mapping.json`.
+1. **`npm run fill-beebom-images`** — **Beebom** article thumbnails (known filenames) for Escape Tsunami, then **ETFB Fandom** `pageimages` for IDs still missing (same wiki as the game). Does **not** mix in TechWiser or generic `playbrainrot.org` packs (those often show the wrong meme character).
+2. **`npm run prefer-playbrainrot`** — optional: rebuild from `playbrainrot.org` slugs only (Steal-a-Brainrot-style art; can mismatch names).
+3. **`npm run fill-empty-images`** — strips **misleading** wiki thumbs (Lucky Block, wrong character files), then fills gaps: **Beebom HEAD** → exact wiki **pageimage** only → **`/images/brainrot-missing.svg`** placeholder. Does **not** use broad wiki search (that caused wrong images).
 
-**Real images:**
-1. Edit `data/image-mapping.json` – add `"id": "https://image-url"` to `mapping`
-2. Or save files in `frontend/public/images/brainrots/[id].png` and set mapping: `"id": "/images/brainrots/id.png"`
-3. Details: `scripts/fetch-images.md`
+- **`npm run cache-thumbnails`** — pobiera zdalne URL-e z mapowania do `frontend/public/images/brainrots/` i ustawia ścieżki `/images/brainrots/...` (miniaturki działają bez proxy Beebom/Wikia).
+- **`npm run fill-ui-sources`** — uzupełnia braki z **Game8** (HTML) + **MediaWiki API** (wiki Escape Tsunami + Steal a Brainrot), zgodnie z listą w UI „Data sources”. Potem zwykle `npm run cache-thumbnails`. Traderie blokuje skrypty (403).
 
-Sources: stealabrainrot.fandom.com, game8.co, escapetsunamiforbrainrots.info
+Manual: edit `data/image-mapping.json` `mapping`, or put files in `frontend/public/images/brainrots/[id].png`. **Pełna lista stron** (wiki, Game8, Traderie, przewodniki itd.): `scripts/fetch-images.md`.
 
 ## Deployment
 
@@ -111,6 +111,7 @@ Tier list **F → D → C → B → A → S → SS → God**, mutations (Lucky, 
 ## AI Features
 
 - **POST /api/chat** — chatbot for players (streaming, trade advice)
+- **Automatic data refresh (backend)** — set `AUTO_UPDATE_ENABLED=1` in `backend/.env` (long-running Node only). Schedules **daily** `update-values` + `sync-data` (income from shigjeta) and **weekly** `detect-new` + `sync-data` (wiki + OpenAI for new entries). Repo root must have run `npm install` so scripts resolve `axios` / `cheerio`. See `backend/.env.example` for cron env vars.
 - **npm run update-values** — `node scripts/update-values.js` — update values from shigjeta.net
 - **npm run detect-new** — `node scripts/detect-new-brainrots.js` — detect new brainrots from Fandom wiki
 - **npm run add-wiki-items** — `node scripts/add-more-items-from-wiki.js` — add missing items from wiki Category:Brainrots (syncs `backend/data` + `frontend/public/brainrots.json`)

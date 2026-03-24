@@ -7,9 +7,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const BRAINROTS_PATH = path.join(__dirname, '..', 'backend', 'data', 'brainrots.json');
+const BRAINROTS_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
 const ROOT_MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
 const BACKEND_MAPPING_PATH = path.join(__dirname, '..', 'backend', 'data', 'image-mapping.json');
+const PUBLIC_MAPPING_PATH = path.join(__dirname, '..', 'frontend', 'public', 'image-mapping.json');
 const FANDOM_API = 'https://escape-tsunami-for-brainrots.fandom.com/api.php';
 
 function nameToFandomTitle(name) {
@@ -107,18 +108,35 @@ async function main() {
     await new Promise(r => setTimeout(r, 250));
   }
 
+  const PLACEHOLDER = '/images/brainrot-missing.svg';
+  for (const item of brainrots.items) {
+    if (!(rootMapping[item.id] && String(rootMapping[item.id]).trim())) {
+      rootMapping[item.id] = PLACEHOLDER;
+    }
+    if (!(backendMapping[item.id] && String(backendMapping[item.id]).trim())) {
+      backendMapping[item.id] = PLACEHOLDER;
+    }
+  }
+
   rootMappingData.mapping = rootMapping;
-  rootMappingData._source = 'escape-tsunami-for-brainrots.fandom.com';
+  rootMappingData._source =
+    'beebom.com (article list) + escape-tsunami-for-brainrots.fandom.com pageimages; /images/brainrot-missing.svg if no wiki page';
   rootMappingData._updated = new Date().toISOString().slice(0, 10);
   writeJson(ROOT_MAPPING_PATH, rootMappingData);
 
   backendMappingData.mapping = backendMapping;
-  backendMappingData._source = 'escape-tsunami-for-brainrots.fandom.com';
+  backendMappingData._source = rootMappingData._source;
   backendMappingData._updated = new Date().toISOString().slice(0, 10);
   writeJson(BACKEND_MAPPING_PATH, backendMappingData);
+  if (fs.existsSync(path.dirname(PUBLIC_MAPPING_PATH))) {
+    writeJson(PUBLIC_MAPPING_PATH, rootMappingData);
+  }
 
   console.log(`\nFound ${found} images. Entries written: ${written}`);
   console.log(`Updated:\n- ${ROOT_MAPPING_PATH}\n- ${BACKEND_MAPPING_PATH}`);
+  if (fs.existsSync(path.dirname(PUBLIC_MAPPING_PATH))) {
+    console.log(`- ${PUBLIC_MAPPING_PATH}`);
+  }
 }
 
 function titleForItem(item, altName) {

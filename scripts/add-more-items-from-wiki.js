@@ -25,6 +25,23 @@ function normalizeName(name) {
   return name.toLowerCase().trim().replace(/\s+/g, ' ');
 }
 
+/** Omitted from app (no real thumbnail) — do not re-add from wiki. */
+const SKIP_WIKI_NAMES = new Set(
+  [
+    'Arcobaleno Camellino',
+    'Centrifuga Narwhalus Rex',
+    'Crystallini Masterclockini',
+    'Darlungini Pandanneli',
+    'Don Magmito',
+    'Dutchmello Velerino',
+    'Fantasmelli Pipistrelli',
+    'Nebuluck',
+    'Scaldarino Derpino',
+    'Tostino Flambante',
+    'Tung Tung Clownissino',
+  ].map(normalizeName)
+);
+
 async function fetchCategoryMembers() {
   const titles = [];
   let cmcontinue = undefined;
@@ -78,7 +95,15 @@ async function main() {
   const wikiTitles = await fetchCategoryMembers();
   console.log(`Found ${wikiTitles.length} pages in Category:Brainrots`);
 
-  const toAddRaw = wikiTitles.filter((t) => !existingNames.has(normalizeName(t)));
+  /** Skip if same slug as an existing id (catches wiki spelling variants vs our list). */
+  const existingSlugs = new Set(brainrotsData.items.map((i) => i.id));
+  const toAddRaw = wikiTitles.filter((t) => {
+    if (SKIP_WIKI_NAMES.has(normalizeName(t))) return false;
+    if (existingNames.has(normalizeName(t))) return false;
+    const sid = slug(t);
+    if (existingSlugs.has(sid)) return false;
+    return true;
+  });
   const seen = new Set();
   const toAdd = toAddRaw.filter((t) => {
     const n = normalizeName(t);

@@ -6,20 +6,30 @@ const API_ROOT = import.meta.env.VITE_API_URL || ''
 const API_BASE = `${API_ROOT}/api`
 
 /**
- * Wikia / TechWiser often block <img> hotlinking in the browser.
- * Load those through our /api/image proxy (same-origin when using VITE_API_URL or Vite dev proxy).
+ * Wikia / Beebom often block hotlinking — use /api/image when backend is available.
+ * When `direct` is true (static fallback, no API), use raw URLs so playbrainrot/beebom still load.
  */
-function displayImageUrl(raw) {
+function displayImageUrl(raw, direct = false) {
   if (!raw || typeof raw !== 'string') return ''
   const s = raw.trim()
   if (!s.startsWith('http')) return s
+  if (direct) return s
   const lower = s.toLowerCase()
   const needsProxy =
     lower.includes('wikia.nocookie.net') ||
     lower.includes('fandom.com') ||
     lower.includes('wikia.com') ||
     lower.includes('techwiser.com') ||
-    lower.includes('beebom.com')
+    lower.includes('beebom.com') ||
+    lower.includes('game8.co') ||
+    lower.includes('traderie.com') ||
+    lower.includes('progameguides.com') ||
+    lower.includes('itemku.com') ||
+    lower.includes('shigjeta.net') ||
+    lower.includes('escape-tsunami-for-brainrots.com') ||
+    lower.includes('escapetsunamiforbrainrots.com') ||
+    lower.includes('escapetsunamiforbrainrots.org') ||
+    lower.includes('gamerant.com')
   if (needsProxy) {
     return `${API_ROOT}/api/image?url=${encodeURIComponent(s)}`
   }
@@ -31,6 +41,13 @@ function formatIncome(income) {
   if (income >= 1e6) return `${(income / 1e6).toFixed(1)}M`
   if (income >= 1e3) return `${(income / 1e3).toFixed(1)}K`
   return String(income)
+}
+
+/** No real thumbnail yet — avoid loading brainrot-missing.svg (big “?”); show initials like other gaps */
+function isPlaceholderThumbUrl(raw) {
+  if (!raw || typeof raw !== 'string') return true
+  const s = raw.trim().toLowerCase()
+  return s.includes('brainrot-missing')
 }
 
 function getRarityColor(rarity) {
@@ -50,17 +67,18 @@ function getRarityColor(rarity) {
   return map[rarity] || 'var(--text-muted)'
 }
 
-const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = false, column }) {
+const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = false, column, imageDirect = false }) {
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const rawUrl = item.imageThumb || item.image
-  const imageUrl = displayImageUrl(rawUrl)
+  const usePlaceholder = isPlaceholderThumbUrl(rawUrl)
+  const imageUrl = usePlaceholder ? '' : displayImageUrl(rawUrl, imageDirect)
 
   useEffect(() => {
     setImgFailed(false)
-  }, [rawUrl, imageUrl])
+  }, [rawUrl, imageUrl, imageDirect])
 
-  const showImage = imageUrl && !imgFailed
+  const showImage = imageUrl && !imgFailed && !usePlaceholder
 
   return (
     <div
@@ -85,6 +103,10 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
           decoding="async"
           fetchPriority="low"
           onError={() => setImgFailed(true)}
+          onLoad={(e) => {
+            const { naturalWidth: w, naturalHeight: h } = e.currentTarget
+            if (w < 2 || h < 2) setImgFailed(true)
+          }}
         />
       ) : (
         <span className="item-thumb item-thumb-text" style={{ background: getRarityColor(item.rarity) }}>
@@ -110,7 +132,7 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
 
 ItemCard.displayName = 'ItemCard'
 
-function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId }) {
+function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId, imageDirect = false }) {
   const [dragOver, setDragOver] = useState(false)
 
   const handleDrop = (e) => {
@@ -165,6 +187,7 @@ function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId }) {
               showRemove
               onRemove={() => onRemove(id, columnId)}
               column={columnId}
+              imageDirect={imageDirect}
             />
           )
         })}
@@ -215,6 +238,8 @@ function VerschilCenter({ resultData }) {
 export default function App() {
   const [items, setItems] = useState([])
   const [meta, setMeta] = useState(null)
+  /** Static JSON fallback (no backend): load image URLs directly without /api/image proxy */
+  const [imageDirect, setImageDirect] = useState(false)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [rarityFilter, setRarityFilter] = useState('')
@@ -231,21 +256,32 @@ export default function App() {
         return r.json()
       })
       .then(data => {
+        setImageDirect(false)
         setItems(data.items || [])
         setMeta(data.meta || null)
       })
       .catch(() => {
-        // Fallback when backend unavailable – load from public/brainrots.json
-        fetch('/brainrots.json')
-          .then(r => r.json())
-          .then(data => {
-            const list = data.items || []
-            setItems(list.map(it => ({
-              ...it,
-              income: it.income ?? it.baseIncome ?? 0,
-              rp: Math.min(100, Math.max(1, Math.round(10 * Math.log10((it.income ?? it.baseIncome ?? 0) + 1))))
-            })))
+        Promise.all([
+          fetch('/brainrots.json').then((r) => {
+            if (!r.ok) throw new Error('brainrots')
+            return r.json()
+          }),
+          fetch('/image-mapping.json')
+            .then((r) => (r.ok ? r.json() : { mapping: {} }))
+            .catch(() => ({ mapping: {} }))
+        ])
+          .then(([data, mapData]) => {
+            const mapping = mapData.mapping || {}
+            const list = (data.items || []).map((it) => {
+              const income = it.income ?? it.baseIncome ?? 0
+              const raw = (mapping[it.id] || it.imageUrl || '').trim()
+              const img = raw ? displayImageUrl(raw, true) : ''
+              const rp = Math.min(100, Math.max(1, Math.round(10 * Math.log10(income + 1))))
+              return { ...it, income, rp, image: img, imageThumb: img }
+            })
+            setItems(list)
             setMeta(data.meta || null)
+            setImageDirect(true)
           })
           .catch(() => setItems([]))
       })
@@ -359,7 +395,7 @@ export default function App() {
           <div className="pool-grid">
             {filteredItems.map(item => (
               <div key={item.id} className="pool-actions">
-                <ItemCard item={item} onAdd={addItem} column="yours" />
+                <ItemCard item={item} onAdd={addItem} column="yours" imageDirect={imageDirect} />
                 <div className="pool-buttons">
                   <button onClick={(e) => { e.stopPropagation(); addItem(item, 'yours'); }} title="Add to Yours">←</button>
                   <button onClick={(e) => { e.stopPropagation(); addItem(item, 'theirs'); }} title="Add to Theirs">→</button>
@@ -383,6 +419,7 @@ export default function App() {
               <div>
                 <strong>List (values, rarity)</strong>
                 <ul>
+                  <li><a href="https://techwiser.com/escape-tsunami-for-brainrots-all-brainrots-list/" target="_blank" rel="noopener noreferrer">TechWiser</a> — lista, $/s, miniatury w tabeli</li>
                   <li><a href="https://escapetsunamiforbrainrotswiki.com/escape-tsunami-for-brainrots-value" target="_blank" rel="noopener noreferrer">escapetsunamiforbrainrotswiki.com</a></li>
                   <li><a href="https://www.shigjeta.net/escape-tsunami-for-brainrots-trade-values-every-brainrot-ranked-by-income-and-rarity/" target="_blank" rel="noopener noreferrer">shigjeta.net</a></li>
                   <li><a href="https://gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values/" target="_blank" rel="noopener noreferrer">gamerant.com</a></li>
@@ -393,10 +430,23 @@ export default function App() {
               <div>
                 <strong>Images</strong>
                 <ul>
-                  <li><a href="https://traderie.com/escapetsunamiforbrainrots/products" target="_blank" rel="noopener noreferrer">Traderie – item list</a></li>
+                  <li><a href="https://traderie.com/escapetsunamiforbrainrots/products" target="_blank" rel="noopener noreferrer">Traderie – item list</a> (403 dla botów; tylko w przeglądarce)</li>
                   <li><a href="https://game8.co/games/Roblox/archives/581250" target="_blank" rel="noopener noreferrer">Game8 – List of All Brainrots</a></li>
-                  <li><a href="https://stealabrainrot.fandom.com" target="_blank" rel="noopener noreferrer">Steal A Brainrot Fandom</a></li>
+                  <li><a href="https://stealabrainrot.fandom.com" target="_blank" rel="noopener noreferrer">Steal A Brainrot Fandom</a> (API w projekcie)</li>
                   <li><a href="https://escapetsunamiforbrainrots.info/brainrots" target="_blank" rel="noopener noreferrer">escapetsunamiforbrainrots.info</a></li>
+                  <li className="sources-cli">CLI: <code>npm run fill-ui-sources</code> → Game8 + wiki ETFB + wiki Steal (MediaWiki API), potem <code>npm run cache-thumbnails</code></li>
+                </ul>
+              </div>
+              <div>
+                <strong>Community &amp; official</strong>
+                <ul>
+                  <li><a href="https://www.pinterest.com/ideas/escape-tsunami-for-brainrot/907294892470/" target="_blank" rel="noopener noreferrer">Pinterest</a> — fanarty / memy (ręcznie)</li>
+                  <li><a href="https://roblox.fandom.com/wiki/Wave_of_Brainrots/Escape_Tsunami_For_Brainrots" target="_blank" rel="noopener noreferrer">Roblox Fandom wiki</a> — opis gry, screeny</li>
+                  <li><a href="https://www.roblox.com/games/131623223084840/Escape-Tsunami-For-Brainrots" target="_blank" rel="noopener noreferrer">Roblox — strona gry</a> — oficjalne assety</li>
+                  <li><a href="https://discord.com/invite/escapetsunamiforbrainrots" target="_blank" rel="noopener noreferrer">Discord</a> — community, trading, value updates</li>
+                  <li><a href="https://tenor.com/search/roblox-escape-tsunami-brainrots-gifs" target="_blank" rel="noopener noreferrer">Tenor</a> — GIF-y (np. „roblox escape tsunami brainrots”)</li>
+                  <li><a href="https://giphy.com/search/escape-tsunami-brainrots" target="_blank" rel="noopener noreferrer">GIPHY</a> — animacje / memy</li>
+                  <li className="sources-muted">Instagram / TikTok: <a href="https://www.instagram.com/explore/tags/escapetsunamiforbrainrots/" target="_blank" rel="noopener noreferrer">#escapetsunamiforbrainrots</a>, <a href="https://www.tiktok.com/tag/escapetsunamiforbrainrots" target="_blank" rel="noopener noreferrer">TikTok tag</a> — reels, ręcznie (licencje)</li>
                 </ul>
               </div>
             </div>
@@ -412,6 +462,7 @@ export default function App() {
           onAdd={addItem}
           onRemove={removeItem}
           columnId="yours"
+          imageDirect={imageDirect}
         />
         <div className="center-column">
           <VerschilCenter resultData={tradeResult} />
@@ -423,6 +474,7 @@ export default function App() {
           onAdd={addItem}
           onRemove={removeItem}
           columnId="theirs"
+          imageDirect={imageDirect}
         />
       </div>
       <ChatWidget />

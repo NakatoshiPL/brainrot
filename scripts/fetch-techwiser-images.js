@@ -25,6 +25,7 @@ const SOURCE_URL = 'https://techwiser.com/escape-tsunami-for-brainrots-all-brain
 
 const ROOT_MAPPING_PATH = path.join(__dirname, '..', 'data', 'image-mapping.json');
 const BACKEND_MAPPING_PATH = path.join(__dirname, '..', 'backend', 'data', 'image-mapping.json');
+const PUBLIC_MAPPING_PATH = path.join(__dirname, '..', 'frontend', 'public', 'image-mapping.json');
 const BACKEND_BRAINROTS_PATH = path.join(__dirname, '..', 'backend', 'data', 'brainrots.json');
 
 function toId(name) {
@@ -172,6 +173,9 @@ async function main() {
   backendMappingData.mapping = backendMapping;
   writeJson(ROOT_MAPPING_PATH, rootMappingData);
   writeJson(BACKEND_MAPPING_PATH, backendMappingData);
+  if (fs.existsSync(path.dirname(PUBLIC_MAPPING_PATH))) {
+    writeJson(PUBLIC_MAPPING_PATH, rootMappingData);
+  }
 
   console.log(`✅ TechWiser parsed: ${techwiser.length} rows`);
   console.log(`✅ Matched items in our list: ${matched}`);
@@ -180,6 +184,9 @@ async function main() {
   console.log(`↩️  Skipped (no change needed): ${skippedExisting}`);
   console.log(`↩️  Skipped (no id): ${skippedNoId}`);
   console.log(`\nUpdated:\n- ${ROOT_MAPPING_PATH}\n- ${BACKEND_MAPPING_PATH}`);
+  if (fs.existsSync(path.dirname(PUBLIC_MAPPING_PATH))) {
+    console.log(`- ${PUBLIC_MAPPING_PATH}`);
+  }
 }
 
 main().catch((err) => {
