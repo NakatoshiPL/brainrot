@@ -14,7 +14,8 @@ const cheerio = require('cheerio');
 
 const DATA_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
 const OVERRIDES_PATH = path.join(__dirname, '..', 'data', 'income-overrides.json');
-const SOURCE_URL = 'https://www.shigjeta.net/escape-tsunami-for-brainrots-trade-values-every-brainrot-ranked-by-income-and-rarity/';
+const SOURCE_SHIGJETA = 'https://www.shigjeta.net/escape-tsunami-for-brainrots-trade-values-every-brainrot-ranked-by-income-and-rarity/';
+const SOURCE_TECHWISER = 'https://techwiser.com/escape-tsunami-for-brainrots-all-brainrots-list/';
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 /** Our normalized slug (from app name) -> shigjeta table slug when spelling differs. */
@@ -33,10 +34,11 @@ function normalizeName(name) {
 
 function parseIncome(str) {
   if (!str || typeof str !== 'string') return null;
-  const s = str.trim().replace(/\s/g, '');
+  const s = str.trim().replace(/[\s,_]/g, '');
   const m = s.match(/\$?([\d.]+)\s*(K|M|B)?\/?s?/i);
   if (!m) return null;
   let num = parseFloat(m[1]);
+  if (!Number.isFinite(num) || num <= 0) return null;
   const suffix = (m[2] || '').toUpperCase();
   if (suffix === 'K') num *= 1e3;
   else if (suffix === 'M') num *= 1e6;
@@ -44,30 +46,78 @@ function parseIncome(str) {
   return Math.round(num);
 }
 
-function scrapeValues() {
-  return axios.get(SOURCE_URL, {
+function fetchUrl(url) {
+  return axios.get(url, {
     headers: { 'User-Agent': USER_AGENT },
     timeout: 15000,
-    validateStatus: (s) => s === 200
-  }).then((res) => {
-    if (res.status !== 200) throw new Error(`HTTP ${res.status}`);
-    const $ = cheerio.load(res.data);
-    const rows = [];
-    $('table tbody tr, table tr').each((_, tr) => {
-      const cells = $(tr).find('td');
-      if (cells.length >= 3) {
-        const name = $(cells[0]).text().trim();
-        const incomeStr = $(cells[2]).text().trim();
-        if (name && incomeStr) rows.push({ name, incomeStr });
-      } else if (cells.length === 2) {
-        const name = $(cells[0]).text().trim();
-        const incomeStr = $(cells[1]).text().trim();
-        if (name && incomeStr && incomeStr.includes('$')) rows.push({ name, incomeStr });
-      }
-    });
-    if (rows.length < 5) throw new Error('Could not parse enough table rows');
-    return rows.map((r) => ({ name: r.name, income: parseIncome(r.incomeStr) })).filter((r) => r.income != null);
+    validateStatus: (s) => s === 200,
+  }).then((res) => res.data);
+}
+
+function scrapeShigjeta(html) {
+  const $ = cheerio.load(html);
+  const rows = [];
+  $('table tbody tr, table tr').each((_, tr) => {
+    const cells = $(tr).find('td');
+    if (cells.length >= 3) {
+      const name = $(cells[0]).text().trim();
+      const incomeStr = $(cells[2]).text().trim();
+      if (name && incomeStr) rows.push({ name, incomeStr });
+    } else if (cells.length === 2) {
+      const name = $(cells[0]).text().trim();
+      const incomeStr = $(cells[1]).text().trim();
+      if (name && incomeStr && incomeStr.includes('$')) rows.push({ name, incomeStr });
+    }
   });
+  return rows;
+}
+
+function scrapeTechWiser(html) {
+  const $ = cheerio.load(html);
+  const rows = [];
+  $('table tr').each((_, tr) => {
+    const cells = $(tr).find('td');
+    if (cells.length >= 3) {
+      const name = $(cells[1]).text().trim();
+      const incomeStr = $(cells[2]).text().trim();
+      if (name && incomeStr && incomeStr.includes('$')) rows.push({ name, incomeStr });
+    }
+  });
+  return rows;
+}
+
+/**
+ * Returns two Maps: primary (Shigjeta — trusted, higher values) and fallback (TechWiser).
+ * Shigjeta values always win; TechWiser only fills items with income=0.
+ */
+async function scrapeValues() {
+  const results = await Promise.allSettled([
+    fetchUrl(SOURCE_SHIGJETA).then((html) => ({ source: 'shigjeta', rows: scrapeShigjeta(html) })),
+    fetchUrl(SOURCE_TECHWISER).then((html) => ({ source: 'techwiser', rows: scrapeTechWiser(html) })),
+  ]);
+
+  const primary = new Map();
+  const fallback = new Map();
+
+  for (const r of results) {
+    if (r.status === 'rejected') {
+      console.warn(`[update-values] source failed: ${r.reason?.message || r.reason}`);
+      continue;
+    }
+    const { source, rows } = r.value;
+    const target = source === 'shigjeta' ? primary : fallback;
+    let count = 0;
+    for (const { name, incomeStr } of rows) {
+      const slug = normalizeName(name);
+      const income = parseIncome(incomeStr);
+      if (!slug || income == null) continue;
+      if (!target.has(slug)) { target.set(slug, income); count++; }
+    }
+    console.log(`[update-values] ${source}: ${rows.length} rows → ${count} slugs`);
+  }
+
+  if (primary.size + fallback.size < 5) throw new Error('All sources failed or returned too few rows');
+  return { primary, fallback };
 }
 
 async function main() {
@@ -80,21 +130,15 @@ async function main() {
     process.exit(1);
   }
 
-  let scraped;
+  let primary, fallback;
   try {
-    scraped = await scrapeValues();
-    console.log(`Scraped ${scraped.length} brainrot values from ${SOURCE_URL}`);
+    ({ primary, fallback } = await scrapeValues());
+    console.log(`[update-values] primary(shigjeta): ${primary.size}, fallback(techwiser): ${fallback.size}`);
   } catch (e) {
     console.error('Scraping failed:', e.message);
     console.error('File NOT overwritten.');
     process.exit(1);
   }
-
-  const scrapedBySlug = new Map();
-  scraped.forEach(({ name, income }) => {
-    const slug = normalizeName(name);
-    if (slug) scrapedBySlug.set(slug, income);
-  });
 
   let overrides = {};
   if (fs.existsSync(OVERRIDES_PATH)) {
@@ -109,19 +153,32 @@ async function main() {
   const updated = [];
   data.items.forEach((item) => {
     const slug = normalizeName(item.name);
+    const currentIncome = item.income ?? item.baseIncome ?? 0;
+
+    // 1. Overrides always win
     let income = overrides[item.id];
+
+    // 2. Primary (Shigjeta) — trusted for any item it covers
     if (income == null || typeof income !== 'number' || !Number.isFinite(income)) {
-      income = scrapedBySlug.get(slug);
+      income = primary.get(slug);
       if (income == null && slug && SCRAPED_ALIASES[slug]) {
-        income = scrapedBySlug.get(SCRAPED_ALIASES[slug]);
+        income = primary.get(SCRAPED_ALIASES[slug]);
       }
     }
+
+    // 3. Fallback (TechWiser) — only fills items currently at income=0
+    if (income == null && currentIncome === 0) {
+      income = fallback.get(slug);
+      if (income == null && slug && SCRAPED_ALIASES[slug]) {
+        income = fallback.get(SCRAPED_ALIASES[slug]);
+      }
+    }
+
     if (income == null) return;
-    const prev = item.income ?? item.baseIncome ?? 0;
-    if (prev === income) return;
+    if (currentIncome === income) return;
     item.baseIncome = income;
     item.income = income;
-    updated.push({ name: item.name, prev, income });
+    updated.push({ name: item.name, prev: currentIncome, income });
   });
 
   if (updated.length > 0) {
