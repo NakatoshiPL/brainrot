@@ -484,14 +484,13 @@
   display: block;
   width: 100%;
   max-width: 84px;
-  margin: 0 auto;
+  margin: 0.2rem auto 0;
   font-size: 0.62rem;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-weight: 500;
-  color: var(--text-muted);
+  color: var(--accent-cyan);
   text-align: center;
   line-height: 1.25;
-  min-height: 2.4em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -500,13 +499,7 @@
 .item-income-line .item-income-curr,
 .item-income-line .item-income-unit {
   font-size: 0.55rem;
-  opacity: 0.85;
-}
-
-.item-income-missing {
-  color: var(--text-muted);
-  opacity: 0.5;
-  font-size: 0.85rem;
+  opacity: 0.75;
 }
 
 .tooltip {

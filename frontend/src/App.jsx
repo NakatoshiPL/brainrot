@@ -130,20 +130,13 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
           {item.name.slice(0, 2)}
         </span>
       )}
-      <div
-        className="item-income-line"
-        title={incomeVal > 0 ? `Income $${formatIncome(incomeVal)}/s` : 'No $/s in our data yet'}
-      >
-        {incomeVal > 0 ? (
-          <>
-            <span className="item-income-curr">$</span>
-            {formatIncome(incomeVal)}
-            <span className="item-income-unit">/s</span>
-          </>
-        ) : (
-          <span className="item-income-missing">—</span>
-        )}
-      </div>
+      {incomeVal > 0 && (
+        <div className="item-income-line" title={`Income $${formatIncome(incomeVal)}/s`}>
+          <span className="item-income-curr">$</span>
+          {formatIncome(incomeVal)}
+          <span className="item-income-unit">/s</span>
+        </div>
+      )}
       {fineHover && tooltip && (
         <div className="tooltip">
           <strong>{item.name}</strong>
@@ -154,7 +147,7 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
               Sources: {Object.entries(item.source_values).map(([k, v]) => `${k}: ${v}`).join(', ')}
             </span>
           )}
-          <span className="tooltip-updated">Updated: {item.lastUpdated}</span>
+          {item.lastUpdated && <span className="tooltip-updated">Updated: {item.lastUpdated}</span>}
         </div>
       )}
     </div>
