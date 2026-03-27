@@ -36,6 +36,21 @@ function displayImageUrl(raw, direct = false) {
   return s
 }
 
+/** Only desktop mouse hover — avoids sticky/fake tooltips on touch and hybrid laptops */
+function useFinePointerHover() {
+  const [ok, setOk] = useState(() =>
+    typeof window !== 'undefined' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const fn = () => setOk(mq.matches)
+    mq.addEventListener('change', fn)
+    return () => mq.removeEventListener('change', fn)
+  }, [])
+  return ok
+}
+
 function formatIncome(income) {
   if (income >= 1e9) return `${(income / 1e9).toFixed(1)}B`
   if (income >= 1e6) return `${(income / 1e6).toFixed(1)}M`
@@ -68,6 +83,7 @@ function getRarityColor(rarity) {
 }
 
 const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = false, column, imageDirect = false }) {
+  const fineHover = useFinePointerHover()
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
   const incomeVal = item.income ?? item.baseIncome ?? 0
@@ -85,8 +101,8 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
     <div
       className={`item-card ${showRemove ? 'in-column' : 'in-pool'}`}
       onClick={() => showRemove ? onRemove() : onAdd(item, column)}
-      onMouseEnter={() => setTooltip(true)}
-      onMouseLeave={() => setTooltip(false)}
+      onMouseEnter={() => fineHover && setTooltip(true)}
+      onMouseLeave={() => fineHover && setTooltip(false)}
       draggable={!showRemove}
       onDragStart={(e) => {
         if (!showRemove) {
@@ -128,7 +144,7 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
           <span className="item-income-missing">—</span>
         )}
       </div>
-      {tooltip && (
+      {fineHover && tooltip && (
         <div className="tooltip">
           <strong>{item.name}</strong>
           <span style={{ color: getRarityColor(item.rarity) }}>{item.rarity}</span>
@@ -147,7 +163,7 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
 
 ItemCard.displayName = 'ItemCard'
 
-function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId, imageDirect = false }) {
+function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId, imageDirect = false, incomeSum = 0 }) {
   const [dragOver, setDragOver] = useState(false)
 
   const handleDrop = (e) => {
@@ -173,7 +189,12 @@ function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId, imageDi
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
-      <h3 className="column-title">{title}</h3>
+      <h3 className="column-title">
+        {title}
+        {incomeSum > 0 && (
+          <span className="column-income-sum"> · ${formatIncome(incomeSum)}/s</span>
+        )}
+      </h3>
       <select
         className="column-select"
         value=""
@@ -292,6 +313,19 @@ export default function App() {
   const [tradeResult, setTradeResult] = useState(null)
   const [poolOpen, setPoolOpen] = useState(true)
   const [sourcesOpen, setSourcesOpen] = useState(false)
+  useEffect(() => {
+    if (!sourcesOpen) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') setSourcesOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [sourcesOpen])
 
   useEffect(() => {
     fetch(`${API_BASE}/items`)
@@ -394,6 +428,8 @@ export default function App() {
 
   const yourSum = yourItems.reduce((s, id) => s + (items.find(i => i.id === id)?.rp || 0), 0)
   const theirSum = theirItems.reduce((s, id) => s + (items.find(i => i.id === id)?.rp || 0), 0)
+  const yourIncomeSum = yourItems.reduce((s, id) => s + (items.find(i => i.id === id)?.income ?? items.find(i => i.id === id)?.baseIncome ?? 0), 0)
+  const theirIncomeSum = theirItems.reduce((s, id) => s + (items.find(i => i.id === id)?.income ?? items.find(i => i.id === id)?.baseIncome ?? 0), 0)
 
   if (loading) {
     return (
@@ -457,13 +493,32 @@ export default function App() {
         </div>
       )}
 
-      <div className="sources-section">
-        <button
-          className="sources-toggle"
-          onClick={() => setSourcesOpen(!sourcesOpen)}
-        >
-          {sourcesOpen ? '▼' : '▶'} Data sources
-        </button>
+      <div className={`sources-section${sourcesOpen ? ' sources-section-open' : ''}`}>
+        {sourcesOpen && (
+          <div
+            className="sources-backdrop"
+            role="presentation"
+            onClick={() => setSourcesOpen(false)}
+          />
+        )}
+        <div className={`sources-toolbar ${sourcesOpen ? 'sources-toolbar-open' : ''}`}>
+          <button
+            type="button"
+            className="sources-toggle"
+            onClick={() => setSourcesOpen(!sourcesOpen)}
+          >
+            {sourcesOpen ? '▼' : '▶'} Data sources
+          </button>
+          {sourcesOpen && (
+            <button
+              type="button"
+              className="sources-close"
+              onClick={() => setSourcesOpen(false)}
+            >
+              Close
+            </button>
+          )}
+        </div>
         {sourcesOpen && (
           <div className="sources-content">
             <div className="sources-grid">
@@ -514,6 +569,7 @@ export default function App() {
           onRemove={removeItem}
           columnId="yours"
           imageDirect={imageDirect}
+          incomeSum={yourIncomeSum}
         />
         <div className="center-column">
           <VerschilCenter resultData={tradeResult} />
@@ -526,6 +582,7 @@ export default function App() {
           onRemove={removeItem}
           columnId="theirs"
           imageDirect={imageDirect}
+          incomeSum={theirIncomeSum}
         />
       </div>
       <ChatWidget />

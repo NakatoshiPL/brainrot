@@ -178,8 +178,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  content-visibility: auto;
-  contain-intrinsic-size: 148px 104px;
 }
 
 .pool-buttons {
@@ -208,6 +206,45 @@
 
 .sources-section {
   margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.sources-section-open {
+  z-index: 60;
+}
+
+.sources-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.sources-toolbar {
+  position: relative;
+  z-index: 56;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sources-close {
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sources-close:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
 }
 
 .sources-toggle {
@@ -228,6 +265,8 @@
 }
 
 .sources-content {
+  position: relative;
+  z-index: 56;
   margin-top: 0.75rem;
   padding: 1rem;
   background: var(--bg-card);
@@ -332,6 +371,13 @@
   color: var(--text-primary);
 }
 
+.column-income-sum {
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--accent-cyan);
+  font-weight: 500;
+}
+
 .column-sum {
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -402,7 +448,12 @@
 }
 
 .item-card.in-pool {
-  cursor: grab;
+  cursor: pointer;
+}
+
+.item-card.in-pool:active {
+  transform: scale(0.96);
+  box-shadow: none;
 }
 
 .item-thumb {
