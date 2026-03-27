@@ -34,11 +34,14 @@ jobs:
       - name: Sync brainrots.json to backend + frontend
         run: npm run sync-data
 
+      - name: Watch new brainrot candidates
+        run: npm run watch-new-candidates
+
       - name: Commit & push if data changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/brainrots.json backend/data/brainrots.json frontend/public/brainrots.json
+          git add data/brainrots.json backend/data/brainrots.json frontend/public/brainrots.json new-candidates.txt
           if git diff --cached --quiet; then
             echo "No data changes — skipping commit"
           else

@@ -19,7 +19,8 @@
     "sync-data": "node scripts/sync-brainrots-data.js",
     "cache-thumbnails": "node scripts/cache-local-thumbnails.js",
     "fill-ui-sources": "node scripts/fill-images-from-ui-sources.js",
-    "fill-ui-sources-tba": "node scripts/fill-images-from-ui-sources.js --allow-tba"
+    "fill-ui-sources-tba": "node scripts/fill-images-from-ui-sources.js --allow-tba",
+    "watch-new-candidates": "node scripts/watch-new-candidates.js"
   },
   "devDependencies": {
     "axios": "^1.13.6",
@@ -27,5 +28,8 @@
     "concurrently": "^9.2.1",
     "dotenv": "^17.3.1",
     "openai": "^6.31.0"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }
