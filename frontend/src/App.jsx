@@ -70,6 +70,7 @@ function getRarityColor(rarity) {
 const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = false, column, imageDirect = false }) {
   const [tooltip, setTooltip] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
+  const incomeVal = item.income ?? item.baseIncome ?? 0
   const rawUrl = item.imageThumb || item.image
   const usePlaceholder = isPlaceholderThumbUrl(rawUrl)
   const imageUrl = usePlaceholder ? '' : displayImageUrl(rawUrl, imageDirect)
@@ -113,11 +114,25 @@ const ItemCard = memo(function ItemCard({ item, onAdd, onRemove, showRemove = fa
           {item.name.slice(0, 2)}
         </span>
       )}
+      <div
+        className="item-income-line"
+        title={incomeVal > 0 ? `Income $${formatIncome(incomeVal)}/s` : 'No $/s in our data yet'}
+      >
+        {incomeVal > 0 ? (
+          <>
+            <span className="item-income-curr">$</span>
+            {formatIncome(incomeVal)}
+            <span className="item-income-unit">/s</span>
+          </>
+        ) : (
+          <span className="item-income-missing">—</span>
+        )}
+      </div>
       {tooltip && (
         <div className="tooltip">
           <strong>{item.name}</strong>
           <span style={{ color: getRarityColor(item.rarity) }}>{item.rarity}</span>
-          <span>Income: ${formatIncome(item.income)}/s</span>
+          <span>Income: ${formatIncome(incomeVal)}/s</span>
           {item.source_values && (
             <span className="tooltip-sources">
               Sources: {Object.entries(item.source_values).map(([k, v]) => `${k}: ${v}`).join(', ')}
@@ -199,29 +214,53 @@ function ItemColumn({ title, items, allItems, onAdd, onRemove, columnId, imageDi
   )
 }
 
-// Progi WFL z backendu: WIN >15%, FAIR -10..15%, LOSS <-10%
-function computeWFL(yourIncome, theirIncome) {
-  if (yourIncome <= 0 && theirIncome <= 0) return null
-  const diffPercent = yourIncome > 0
-    ? ((theirIncome - yourIncome) / yourIncome) * 100
-    : (theirIncome > 0 ? 100 : 0)
-  const pct = Math.round(diffPercent * 10) / 10
-  let status = 'FAIR ⚖️'
-  let color = '#ffff00'
-  if (diffPercent > 15) {
-    status = 'WIN 🔥'
-    color = '#00ff00'
-  } else if (diffPercent < -10) {
-    status = 'LOSS ❌'
-    color = '#ff0000'
+// Progi jak w backendzie: WIN >15%, FAIR -10..15%, LOSS <-10%. Przy sumach $/s = 0 używamy sumy RP.
+function computeTradeLocal(yourIncome, theirIncome, yourRp, theirRp) {
+  let baseYour = yourIncome
+  let baseTheir = theirIncome
+  let basis = 'income'
+  if (yourIncome === 0 && theirIncome === 0 && (yourRp > 0 || theirRp > 0)) {
+    baseYour = yourRp
+    baseTheir = theirRp
+    basis = 'rp'
   }
-  return { status, color, diffPercent: pct }
+  let status = 'FAIR ⚖️'
+  let color = '#fbbf24'
+  let diffPercent = 0
+  if (baseYour <= 0 && baseTheir <= 0) {
+    return { status: 'NO DATA', color: '#94a3b8', diffPercent: 0, basis: 'none' }
+  }
+  if (baseYour > 0) {
+    const raw = ((baseTheir - baseYour) / baseYour) * 100
+    diffPercent = Math.round(raw * 10) / 10
+    if (diffPercent > 15) {
+      status = 'WIN 🔥'
+      color = '#22c55e'
+    } else if (diffPercent >= -10) {
+      status = 'FAIR ⚖️'
+      color = '#fbbf24'
+    } else {
+      status = 'LOSS ❌'
+      color = '#ef4444'
+    }
+  } else if (baseTheir > 0) {
+    status = 'WIN 🔥'
+    color = '#22c55e'
+    diffPercent = 100
+  }
+  return { status, color, diffPercent, basis }
 }
 
 function VerschilCenter({ resultData }) {
   if (!resultData) return <div className="verschil-center">Select items to compare trade</div>
 
-  const { status, color, diffPercent } = resultData
+  const { status, color, diffPercent, basis } = resultData
+  const basisNote =
+    basis === 'rp'
+      ? 'Compared using RP — $/s is 0 in our data for these picks'
+      : basis === 'none'
+        ? 'Nothing to compare yet'
+        : null
 
   return (
     <div className="verschil-center" style={{ border: `3px solid ${color}`, borderRadius: '12px' }}>
@@ -231,6 +270,11 @@ function VerschilCenter({ resultData }) {
       <div className="verschil-percent" style={{ color }}>
         {diffPercent > 0 ? '+' : ''}{diffPercent}%
       </div>
+      {basisNote && (
+        <div className="verschil-basis" style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.5rem', maxWidth: '220px', marginLeft: 'auto', marginRight: 'auto' }}>
+          {basisNote}
+        </div>
+      )}
     </div>
   )
 }
@@ -297,6 +341,8 @@ export default function App() {
     const itemMap = Object.fromEntries(items.map(i => [i.id, i]))
     const yourIncome = yourItems.reduce((s, id) => s + (itemMap[id]?.income ?? itemMap[id]?.baseIncome ?? 0), 0)
     const theirIncome = theirItems.reduce((s, id) => s + (itemMap[id]?.income ?? itemMap[id]?.baseIncome ?? 0), 0)
+    const yourRp = yourItems.reduce((s, id) => s + (itemMap[id]?.rp || 0), 0)
+    const theirRp = theirItems.reduce((s, id) => s + (itemMap[id]?.rp || 0), 0)
 
     fetch(`${API_BASE}/calculate-trade`, {
       method: 'POST',
@@ -306,12 +352,17 @@ export default function App() {
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data && data.status != null) {
-          setTradeResult({ status: data.status, color: data.color, diffPercent: data.diffPercent ?? 0 })
+          setTradeResult({
+            status: data.status,
+            color: data.color,
+            diffPercent: data.diffPercent ?? 0,
+            basis: data.basis || 'income'
+          })
         } else {
-          setTradeResult(computeWFL(yourIncome, theirIncome))
+          setTradeResult(computeTradeLocal(yourIncome, theirIncome, yourRp, theirRp))
         }
       })
-      .catch(() => setTradeResult(computeWFL(yourIncome, theirIncome)))
+      .catch(() => setTradeResult(computeTradeLocal(yourIncome, theirIncome, yourRp, theirRp)))
   }, [items, yourItems, theirItems])
 
   const filteredItems = useMemo(() => items.filter(item => {

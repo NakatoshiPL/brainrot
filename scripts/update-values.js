@@ -2,6 +2,10 @@
 /**
  * Scrapes brainrot values from shigjeta.net and updates data/brainrots.json.
  * Only updates existing items. Does NOT overwrite file on scrape failure.
+ *
+ * SCRAPED_ALIASES — when the wiki/app slug differs from shigjeta’s row name.
+ * data/income-overrides.json — optional { "item-id": incomePerSecond } for rows
+ * missing from shigjeta’s short table (merge after scrape; overrides win).
  */
 const fs = require('fs');
 const path = require('path');
@@ -9,8 +13,14 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const DATA_PATH = path.join(__dirname, '..', 'data', 'brainrots.json');
+const OVERRIDES_PATH = path.join(__dirname, '..', 'data', 'income-overrides.json');
 const SOURCE_URL = 'https://www.shigjeta.net/escape-tsunami-for-brainrots-trade-values-every-brainrot-ranked-by-income-and-rarity/';
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+/** Our normalized slug (from app name) -> shigjeta table slug when spelling differs. */
+const SCRAPED_ALIASES = {
+  'glacierello-infernetti': 'glacierello-inferniti',
+};
 
 function normalizeName(name) {
   if (!name || typeof name !== 'string') return '';
@@ -80,17 +90,33 @@ async function main() {
     process.exit(1);
   }
 
-  const nameToSlug = new Map();
-  data.items.forEach((item) => {
-    const slug = normalizeName(item.name);
-    if (slug) nameToSlug.set(slug, item);
-  });
-
-  const updated = [];
+  const scrapedBySlug = new Map();
   scraped.forEach(({ name, income }) => {
     const slug = normalizeName(name);
-    const item = nameToSlug.get(slug);
-    if (!item) return;
+    if (slug) scrapedBySlug.set(slug, income);
+  });
+
+  let overrides = {};
+  if (fs.existsSync(OVERRIDES_PATH)) {
+    try {
+      overrides = JSON.parse(fs.readFileSync(OVERRIDES_PATH, 'utf8'));
+      if (!overrides || typeof overrides !== 'object') overrides = {};
+    } catch (_) {
+      overrides = {};
+    }
+  }
+
+  const updated = [];
+  data.items.forEach((item) => {
+    const slug = normalizeName(item.name);
+    let income = overrides[item.id];
+    if (income == null || typeof income !== 'number' || !Number.isFinite(income)) {
+      income = scrapedBySlug.get(slug);
+      if (income == null && slug && SCRAPED_ALIASES[slug]) {
+        income = scrapedBySlug.get(SCRAPED_ALIASES[slug]);
+      }
+    }
+    if (income == null) return;
     const prev = item.income ?? item.baseIncome ?? 0;
     if (prev === income) return;
     item.baseIncome = income;

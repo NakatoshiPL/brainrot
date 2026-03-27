@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-24",
+    "lastUpdated": "2026-03-27",
     "sources": [
       "gamerant.com/roblox-escape-tsunami-for-brainrots-all-brainrots-list-values (luty 2026)",
       "ValuesRBX",
@@ -1359,8 +1359,8 @@
       "name": "Biscotti Macarotti",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 75000000,
+      "income": 75000000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/40/Admin_Biscotti_Macarotti.png/revision/latest/scale-to-width-down/188?cb=20260215182637"
@@ -1392,8 +1392,8 @@
       "name": "Cioccolatone Draghettone",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 15000000,
+      "income": 15000000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/9/9a/Cioccolatone_Draghettone.png/revision/latest/scale-to-width-down/256?cb=20260217154320"
@@ -1425,8 +1425,8 @@
       "name": "Cupitron Consoletron",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 92500000,
+      "income": 92500000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/c4/Emerald_Cupitron_Consoletron.png/revision/latest/scale-to-width-down/144?cb=20260218175215"
@@ -1436,8 +1436,8 @@
       "name": "Din Din Vaultero",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 55000000,
+      "income": 55000000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/4/4f/Lucky_Din_Din_Vaultero.png/revision/latest/scale-to-width-down/256?cb=20260204005803"
@@ -1469,8 +1469,8 @@
       "name": "Freezeti Cobretti",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 90000000,
+      "income": 90000000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/e/e8/UFO_Freezeti_Cobretti.png/revision/latest/scale-to-width-down/182?cb=20260223232331"
@@ -1502,8 +1502,8 @@
       "name": "Glacierello Infernetti",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 60000000,
+      "income": 60000000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/7/72/Radioactive_Glacierello_Infernetti.png/revision/latest/scale-to-width-down/177?cb=20260314131225"
@@ -1524,8 +1524,8 @@
       "name": "Kissarini Heartini",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 5250000,
+      "income": 5250000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/b/b4/Kissarini_Heartini_Image.png/revision/latest/scale-to-width-down/256?cb=20260218064820"
@@ -1590,8 +1590,8 @@
       "name": "Polpo Semaforini",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 10750000,
+      "income": 10750000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/3/3e/Emerald_Polpo_Semaforini.png/revision/latest/scale-to-width-down/197?cb=20260314113027"
@@ -1601,8 +1601,8 @@
       "name": "Rubichetto Cubini",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 88800000,
+      "income": 88800000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/3/30/Money_Rubichetto_Cubini.jpg/revision/latest/scale-to-width-down/256?cb=20260215094338"
@@ -1623,8 +1623,8 @@
       "name": "Tartarughi Attrezzini",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 3070000,
+      "income": 3070000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": "https://static.wikia.nocookie.net/escape-tsunami-for-brainriots/images/c/cb/Shamrock_Tartarughi_Attrezzini.gif/revision/latest/scale-to-width-down/237?cb=20260314185637"
@@ -1634,8 +1634,8 @@
       "name": "Capybara Monitora",
       "rarity": "Common",
       "category": "Common",
-      "baseIncome": 0,
-      "income": 0,
+      "baseIncome": 5090000,
+      "income": 5090000,
       "tier": "F",
       "mutationNote": "Emerald 1.2x / Diamond 2.5x (event)",
       "imageUrl": ""

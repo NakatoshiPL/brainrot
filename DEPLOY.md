@@ -190,3 +190,29 @@ Nic nie musisz włączać ręcznie — jeśli w repo jest folder `.github/workfl
 - `frontend/.env.example` — przykład `VITE_API_URL` (na Vercelu ustawiasz w panelu, nie commituj sekretów w pliku `.env`).
 
 Lokalnie nadal: `npm run dev:all` — bez `VITE_API_URL` działa proxy z `vite.config.js`.
+
+---
+
+## „Last updated” na stronie — czy jest auto-update?
+
+**Nie ma magicznej aktualizacji samej z siebie.** Tekst **Last updated** bierze się z pola `meta.lastUpdated` w pliku `data/brainrots.json`. Zmienia się tylko gdy:
+
+1. Uruchomisz lokalnie (albo w CI) np. `npm run update-values`, `npm run detect-new`, `npm run add-wiki-items`, a potem `npm run sync-data`, **commit + push** — wtedy Railway/Vercel dostają nowy plik.
+2. Albo na **Railway** włączysz harmonogram w backendzie: w zmiennych środowiskowych ustaw **`AUTO_UPDATE_ENABLED=1`** (i ewentualnie crony jak w `backend/.env.example`). Wtedy serwer co noc (domyślnie ~05:00 UTC) odpala `update-values` + `sync-data` z katalogu repo.  
+   - Wymaga pełnego checkoutu monorepo (skrypty w root), działającego scrapowania i opcjonalnie **OPENAI** przy `detect-new`.
+
+**Dlatego** data mogła stać na 24.03 — dopóki nie odpalisz skryptu lub crona, nic się nie zmieni.
+
+---
+
+## Widoczność w Google i udostępnianie (SEO)
+
+W projekcie są już: **`robots.txt`**, **`sitemap.xml`**, meta **Open Graph** / **Twitter** w `frontend/index.html` (domena `etbvalues.com`).
+
+**Ty musisz ręcznie (raz, żeby ludzie znajdowali stronę):**
+
+1. **Google Search Console** — [search.google.com/search-console](https://search.google.com/search-console) → dodaj usługę **etbvalues.com** → zweryfikuj (np. rekord TXT z panelu lub plik HTML) → **Sitemaps** → `https://etbvalues.com/sitemap.xml`.
+2. **Bing Webmaster** (opcjonalnie) — import z Google lub dodaj stronę osobno.
+3. **Udostępnianie** — link `https://etbvalues.com` na Discordzie / w opisie gry / w bio, żeby był „naturalny” ruch i linki.
+
+**Uwaga:** indeksowanie w Google trwa **od kilku dni do kilku tygodni**; nie da się tego „włączyć” w kodzie bez weryfikacji właściciela domeny.

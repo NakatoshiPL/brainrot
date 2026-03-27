@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://etbvalues.com/sitemap.xml

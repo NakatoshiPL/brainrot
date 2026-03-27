@@ -31,6 +31,25 @@ app.use(cors({
 }));
 app.use(express.json());
 
+/** Railway / Docker: must bind 0.0.0.0 so public URL routes traffic to the process. */
+const LISTEN_HOST = process.env.LISTEN_HOST || '0.0.0.0';
+
+function sendHealth(res) {
+  res.status(200).json({ ok: true, service: 'brainrots-api' });
+}
+
+/** Open the Railway public URL (…up.railway.app), not the Vercel site — „Cannot GET /health” there = wrong host. */
+app.get('/', (req, res) => {
+  res.status(200).json({
+    ok: true,
+    service: 'brainrots-api',
+    endpoints: ['/health', '/api/health', '/api/chat/health', '/api/items'],
+  });
+});
+
+app.get('/health', sendHealth);
+app.get('/api/health', sendHealth);
+
 const DATA_PATH = path.join(__dirname, 'data', 'brainrots.json');
 const IMAGE_MAPPING_PATH = path.join(__dirname, 'data', 'image-mapping.json');
 
@@ -236,30 +255,46 @@ app.post('/api/calculate-trade', (req, res) => {
     const yourRp = yourItems.reduce((sum, id) => sum + (itemMap[id]?.rp || 0), 0);
     const theirRp = theirItems.reduce((sum, id) => sum + (itemMap[id]?.rp || 0), 0);
 
+    /** When all $/s are 0 (many brainrots have no income in data), compare by RP sum instead. */
+    let baseYour = yourIncome;
+    let baseTheir = theirIncome;
+    let basis = 'income';
+    if (yourIncome === 0 && theirIncome === 0 && (yourRp > 0 || theirRp > 0)) {
+      baseYour = yourRp;
+      baseTheir = theirRp;
+      basis = 'rp';
+    }
+
     let result = 'Fair';
     let status = 'FAIR ⚖️';
-    let color = '#ffff00';
+    let color = '#fbbf24';
     let diffPercent = 0;
-    if (yourIncome > 0) {
-      diffPercent = ((theirIncome - yourIncome) / yourIncome) * 100;
+    if (baseYour <= 0 && baseTheir <= 0) {
+      status = 'NO DATA';
+      color = '#94a3b8';
+      result = 'N/A';
+      basis = 'none';
+    } else if (baseYour > 0) {
+      diffPercent = ((baseTheir - baseYour) / baseYour) * 100;
       const pct = Math.round(diffPercent * 10) / 10;
+      diffPercent = pct;
       if (diffPercent > 15) {
         result = 'Win';
         status = 'WIN 🔥';
-        color = '#00ff00';
+        color = '#22c55e';
       } else if (diffPercent >= -10) {
         result = 'Fair';
         status = 'FAIR ⚖️';
-        color = '#ffff00';
+        color = '#fbbf24';
       } else {
         result = 'Loss';
         status = 'LOSS ❌';
-        color = '#ff0000';
+        color = '#ef4444';
       }
-    } else if (theirIncome > 0) {
+    } else if (baseTheir > 0) {
       result = 'Win';
       status = 'WIN 🔥';
-      color = '#00ff00';
+      color = '#22c55e';
       diffPercent = 100;
     }
 
@@ -272,7 +307,8 @@ app.post('/api/calculate-trade', (req, res) => {
       verschil: theirRp - yourRp,
       result,
       status,
-      color
+      color,
+      basis
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -343,7 +379,7 @@ ${brainrotsList}`;
 
 const { startAutoUpdate } = require('./scheduler');
 
-app.listen(PORT, () => {
-  console.log(`Brainrots API running on http://localhost:${PORT}`);
+app.listen(PORT, LISTEN_HOST, () => {
+  console.log(`Brainrots API listening on http://${LISTEN_HOST}:${PORT}`);
   startAutoUpdate(path.join(__dirname, '..'));
 });
