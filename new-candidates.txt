@@ -1,15 +1,15 @@
 # New Brainrot Candidates Report
 
-Generated: 2026-03-27T14:15:14.734Z
+Generated: 2026-03-28T05:54:07.760Z
 Local items: 134
 
 ## Source Stats
 - techwiser: 132 names
-- shigjeta-trade-values: 32 names
-- shigjeta-every-brainrot: 92 names
+- shigjeta-trade-values: ERROR (Request failed with status code 403)
+- shigjeta-every-brainrot: ERROR (Request failed with status code 403)
 
 ## New candidates (4)
-- bombardilo-crocodilo | "Bombardilo Crocodilo" | sources: techwiser, shigjeta-every-brainrot
+- bombardilo-crocodilo | "Bombardilo Crocodilo" | sources: techwiser
 - dariungini-pandanneli | "Dariungini Pandanneli" | sources: techwiser
-- gattatino-nyanino | "Gattatino Nyanino" | sources: techwiser, shigjeta-every-brainrot
-- strawberrilli-flamingelli | "Strawberrilli Flamengilli" | sources: techwiser, shigjeta-every-brainrot
+- gattatino-nyanino | "Gattatino Nyanino" | sources: techwiser
+- strawberrilli-flamingelli | "Strawberrilli Flamengilli" | sources: techwiser
