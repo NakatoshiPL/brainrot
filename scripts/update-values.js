@@ -181,12 +181,20 @@ async function main() {
     updated.push({ name: item.name, prev: currentIncome, income });
   });
 
-  if (updated.length > 0) {
-    data.meta = data.meta || {};
-    data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
+  data.meta = data.meta || {};
+  const today = new Date().toISOString().slice(0, 10);
+  const prevDate = data.meta.lastUpdated || '';
+  data.meta.lastUpdated = today;
+
+  const dateChanged = prevDate !== today;
+  if (updated.length > 0 || dateChanged) {
     fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
-    console.log(`Updated ${updated.length} items:`);
-    updated.forEach((u) => console.log(`  ${u.name}: ${u.prev} → ${u.income}`));
+    if (updated.length > 0) {
+      console.log(`Updated ${updated.length} items:`);
+      updated.forEach((u) => console.log(`  ${u.name}: ${u.prev} → ${u.income}`));
+    } else {
+      console.log(`No values changed, refreshed lastUpdated: ${prevDate || '(none)'} → ${today}`);
+    }
   } else {
     console.log('No values changed.');
   }
