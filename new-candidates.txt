@@ -1,15 +1,30 @@
 # New Brainrot Candidates Report
 
-Generated: 2026-04-06T06:28:44.297Z
+Generated: 2026-04-07T06:17:56.692Z
 Local items: 134
 
 ## Source Stats
-- techwiser: 132 names
+- techwiser: 148 names
 - shigjeta-trade-values: ERROR (Request failed with status code 403)
 - shigjeta-every-brainrot: ERROR (Request failed with status code 403)
 
-## New candidates (4)
+## New candidates (19)
+- biscottino-scheletrino | "Biscottino Scheletrino" | sources: techwiser
 - bombardilo-crocodilo | "Bombardilo Crocodilo" | sources: techwiser
+- burrascano-spettro-marinaro | "Burrascano Spettro Marinaro" | sources: techwiser
+- cornettino-fuaco | "Cornettino Fuaco" | sources: techwiser
+- crostina-gelifio | "Crostina Gelifio" | sources: techwiser
 - dariungini-pandanneli | "Dariungini Pandanneli" | sources: techwiser
+- doomini-tiktookini | "Doomini Tiktookini" | sources: techwiser
+- draculini-meowlini | "Draculini Meowlini" | sources: techwiser
+- dutchmello-velerino | "Dutchmello Velerino" | sources: techwiser
+- fantasmelli-pipistrelli | "Fantasmelli Pipistrelli" | sources: techwiser
 - gattatino-nyanino | "Gattatino Nyanino" | sources: techwiser
+- gelato-pinguino | "Gelato Pinguino" | sources: techwiser
+- la-vaca-nebulosa-frostina | "La Vaca Nebulosa Frostina" | sources: techwiser
+- marietti-frigo | "Marietti Frigo" | sources: techwiser
+- pastapot-infernetto | "Pastapot Infernetto" | sources: techwiser
+- sausaggini-sanitario | "Sausaggini Sanitario" | sources: techwiser
+- scaldarino-derpino | "Scaldarino Derpino" | sources: techwiser
 - strawberrilli-flamingelli | "Strawberrilli Flamengilli" | sources: techwiser
+- tostino-flambante | "Tostino Flambante" | sources: techwiser
