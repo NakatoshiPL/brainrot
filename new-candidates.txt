@@ -1,30 +1,50 @@
 # New Brainrot Candidates Report
 
-Generated: 2026-05-20T08:23:03.801Z
+Generated: 2026-05-21T08:29:23.607Z
 Local items: 134
 
 ## Source Stats
-- techwiser: 148 names
+- techwiser: 169 names
 - shigjeta-trade-values: ERROR (Request failed with status code 403)
 - shigjeta-every-brainrot: ERROR (Request failed with status code 403)
 
-## New candidates (19)
+## New candidates (39)
+- antimateria-quartzello | "Antimateria Quartzello" | sources: techwiser
 - biscottino-scheletrino | "Biscottino Scheletrino" | sources: techwiser
 - bombardilo-crocodilo | "Bombardilo Crocodilo" | sources: techwiser
 - burrascano-spettro-marinaro | "Burrascano Spettro Marinaro" | sources: techwiser
+- candelabra-spettacabra | "Candelabra Spettacabra" | sources: techwiser
 - cornettino-fuaco | "Cornettino Fuaco" | sources: techwiser
 - crostina-gelifio | "Crostina Gelifio" | sources: techwiser
+- crystallini-masterclockini | "Crystallini Masterclockini" | sources: techwiser
 - dariungini-pandanneli | "Dariungini Pandanneli" | sources: techwiser
+- don-magmito | "Don Magmito" | sources: techwiser
 - doomini-tiktookini | "Doomini Tiktookini" | sources: techwiser
 - draculini-meowlini | "Draculini Meowlini" | sources: techwiser
 - dutchmello-velerino | "Dutchmello Velerino" | sources: techwiser
+- explodini-cataclismi | "Explodini Cataclismi" | sources: techwiser
 - fantasmelli-pipistrelli | "Fantasmelli Pipistrelli" | sources: techwiser
-- gattatino-nyanino | "Gattatino Nyanino" | sources: techwiser
+- gatti-marshmallini | "Gatti Marshmallini" | sources: techwiser
 - gelato-pinguino | "Gelato Pinguino" | sources: techwiser
+- halloumino-arlecchino | "Halloumino Arlecchino" | sources: techwiser
+- happini-sadini | "Happini Sadini" | sources: techwiser
+- la-combinasion-pasquale-suprema | "La Combinasion Pasquale Suprema" | sources: techwiser
 - la-vaca-nebulosa-frostina | "La Vaca Nebulosa Frostina" | sources: techwiser
+- lamprillo-columnaccini | "Lamprillo Columnaccini" | sources: techwiser
+- los-clownitos-vampiroseppios | "Los Clownitos Vampiroseppios" | sources: techwiser
+- los-escalatori-pasquales | "Los Escalatori Pasquales" | sources: techwiser
 - marietti-frigo | "Marietti Frigo" | sources: techwiser
+- mastodontico-giostraccio | "Mastodontico Giostraccio" | sources: techwiser
+- nebuluck | "Nebuluck" | sources: techwiser
+- pallino-orsetto | "Pallino Orsetto" | sources: techwiser
+- panicini-bloomini | "Panicini Bloomini" | sources: techwiser
 - pastapot-infernetto | "Pastapot Infernetto" | sources: techwiser
+- red-clownitos-vampiro | "Red Clownitos Vampiro" | sources: techwiser
+- renaissance-splatmaster | "Renaissance Splatmaster" | sources: techwiser
 - sausaggini-sanitario | "Sausaggini Sanitario" | sources: techwiser
 - scaldarino-derpino | "Scaldarino Derpino" | sources: techwiser
 - strawberrilli-flamingelli | "Strawberrilli Flamengilli" | sources: techwiser
 - tostino-flambante | "Tostino Flambante" | sources: techwiser
+- trippi-verdillo | "Trippi Verdillo" | sources: techwiser
+- tung-tung-clownissino | "Tung Tung Clownissino" | sources: techwiser
+- warini-tranquilini | "Warini Tranquilini" | sources: techwiser
