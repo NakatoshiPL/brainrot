@@ -1,15 +1,16 @@
 # New Brainrot Candidates Report
 
-Generated: 2026-06-22T10:34:41.888Z
+Generated: 2026-06-23T08:26:36.938Z
 Local items: 134
 
 ## Source Stats
-- techwiser: 169 names
+- techwiser: 179 names
 - shigjeta-trade-values: ERROR (Request failed with status code 403)
 - shigjeta-every-brainrot: ERROR (Request failed with status code 403)
 
-## New candidates (39)
+## New candidates (49)
 - antimateria-quartzello | "Antimateria Quartzello" | sources: techwiser
+- ascendro | "Ascendro" | sources: techwiser
 - biscottino-scheletrino | "Biscottino Scheletrino" | sources: techwiser
 - bombardilo-crocodilo | "Bombardilo Crocodilo" | sources: techwiser
 - burrascano-spettro-marinaro | "Burrascano Spettro Marinaro" | sources: techwiser
@@ -18,20 +19,28 @@ Local items: 134
 - crostina-gelifio | "Crostina Gelifio" | sources: techwiser
 - crystallini-masterclockini | "Crystallini Masterclockini" | sources: techwiser
 - dariungini-pandanneli | "Dariungini Pandanneli" | sources: techwiser
+- derpolini-strictorini | "Derpolini Strictorini" | sources: techwiser
+- disco-lunadrillo | "Disco Lunadrillo" | sources: techwiser
+- don-fenluccio | "Don Fenluccio" | sources: techwiser
 - don-magmito | "Don Magmito" | sources: techwiser
+- don-solunero | "Don Solunero" | sources: techwiser
 - doomini-tiktookini | "Doomini Tiktookini" | sources: techwiser
 - draculini-meowlini | "Draculini Meowlini" | sources: techwiser
 - dutchmello-velerino | "Dutchmello Velerino" | sources: techwiser
 - explodini-cataclismi | "Explodini Cataclismi" | sources: techwiser
 - fantasmelli-pipistrelli | "Fantasmelli Pipistrelli" | sources: techwiser
+- fortunini-sfortunetti | "Fortunini Sfortunetti" | sources: techwiser
+- fossoluna | "Fossoluna" | sources: techwiser
 - gatti-marshmallini | "Gatti Marshmallini" | sources: techwiser
 - gelato-pinguino | "Gelato Pinguino" | sources: techwiser
 - halloumino-arlecchino | "Halloumino Arlecchino" | sources: techwiser
 - happini-sadini | "Happini Sadini" | sources: techwiser
 - la-combinasion-pasquale-suprema | "La Combinasion Pasquale Suprema" | sources: techwiser
+- la-neutron-tikitress | "La Neutron Tikitress" | sources: techwiser
 - la-vaca-nebulosa-frostina | "La Vaca Nebulosa Frostina" | sources: techwiser
 - lamprillo-columnaccini | "Lamprillo Columnaccini" | sources: techwiser
 - los-clownitos-vampiroseppios | "Los Clownitos Vampiroseppios" | sources: techwiser
+- los-elefragolitos-cosmicos | "Los Elefragolitos Cosmicos" | sources: techwiser
 - los-escalatori-pasquales | "Los Escalatori Pasquales" | sources: techwiser
 - marietti-frigo | "Marietti Frigo" | sources: techwiser
 - mastodontico-giostraccio | "Mastodontico Giostraccio" | sources: techwiser
@@ -47,4 +56,5 @@ Local items: 134
 - tostino-flambante | "Tostino Flambante" | sources: techwiser
 - trippi-verdillo | "Trippi Verdillo" | sources: techwiser
 - tung-tung-clownissino | "Tung Tung Clownissino" | sources: techwiser
+- vortice-cornaluna | "Vortice Cornaluna" | sources: techwiser
 - warini-tranquilini | "Warini Tranquilini" | sources: techwiser
