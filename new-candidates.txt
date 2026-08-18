@@ -1,6 +1,6 @@
 # New Brainrot Candidates Report
 
-Generated: 2026-08-17T05:30:38.500Z
+Generated: 2026-08-18T05:23:15.000Z
 Local items: 134
 
 ## Source Stats
